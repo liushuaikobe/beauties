@@ -14,6 +14,9 @@
 		4B13664C1B3EF8A100986654 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B13664A1B3EF8A100986654 /* LaunchScreen.xib */; };
 		4B1366581B3EF8A100986654 /* beautiesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B1366571B3EF8A100986654 /* beautiesTests.swift */; };
 		4B7AC9791B44169200E19056 /* BlurView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B7AC9781B44169200E19056 /* BlurView.swift */; };
+		4B7AC97C1B441B3D00E19056 /* CHTCollectionViewWaterfallLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B7AC97B1B441B3D00E19056 /* CHTCollectionViewWaterfallLayout.swift */; };
+		4B7AC97E1B441DC700E19056 /* HistoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B7AC97D1B441DC700E19056 /* HistoryViewController.swift */; };
+		4B7AC9801B4423AD00E19056 /* BeautyCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B7AC97F1B4423AD00E19056 /* BeautyCollectionViewCell.swift */; };
 		4BD0DD3F1B42C84F00F08CF5 /* Kingfisher.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4BD0DD3D1B42C84F00F08CF5 /* Kingfisher.framework */; };
 		4BD0DD401B42C84F00F08CF5 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4BD0DD3E1B42C84F00F08CF5 /* Alamofire.framework */; };
 		4BD0DD431B42CBA400F08CF5 /* BeautyImageEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BD0DD421B42CBA400F08CF5 /* BeautyImageEntity.swift */; };
@@ -41,6 +44,9 @@
 		4B1366561B3EF8A100986654 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4B1366571B3EF8A100986654 /* beautiesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = beautiesTests.swift; sourceTree = "<group>"; };
 		4B7AC9781B44169200E19056 /* BlurView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BlurView.swift; sourceTree = "<group>"; };
+		4B7AC97B1B441B3D00E19056 /* CHTCollectionViewWaterfallLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CHTCollectionViewWaterfallLayout.swift; sourceTree = "<group>"; };
+		4B7AC97D1B441DC700E19056 /* HistoryViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HistoryViewController.swift; sourceTree = "<group>"; };
+		4B7AC97F1B4423AD00E19056 /* BeautyCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BeautyCollectionViewCell.swift; sourceTree = "<group>"; };
 		4BD0DD3D1B42C84F00F08CF5 /* Kingfisher.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Kingfisher.framework; path = Carthage/Build/iOS/Kingfisher.framework; sourceTree = "<group>"; };
 		4BD0DD3E1B42C84F00F08CF5 /* Alamofire.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Alamofire.framework; path = Carthage/Build/iOS/Alamofire.framework; sourceTree = "<group>"; };
 		4BD0DD421B42CBA400F08CF5 /* BeautyImageEntity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BeautyImageEntity.swift; sourceTree = "<group>"; };
@@ -97,14 +103,17 @@
 		4B13663E1B3EF8A100986654 /* beauties */ = {
 			isa = PBXGroup;
 			children = (
+				4B7AC97A1B441B1700E19056 /* CHTCollectionViewWaterfallLayout */,
 				4BD0DD411B42CB8400F08CF5 /* Entiy */,
 				4B0DBFF41B3F9A4E009250A1 /* Utils */,
 				4B1366411B3EF8A100986654 /* AppDelegate.swift */,
 				4B1366431B3EF8A100986654 /* TodayViewController.swift */,
+				4B7AC97D1B441DC700E19056 /* HistoryViewController.swift */,
 				4B1366451B3EF8A100986654 /* Main.storyboard */,
 				4B1366481B3EF8A100986654 /* Images.xcassets */,
 				4B13664A1B3EF8A100986654 /* LaunchScreen.xib */,
 				4B13663F1B3EF8A100986654 /* Supporting Files */,
+				4B7AC97F1B4423AD00E19056 /* BeautyCollectionViewCell.swift */,
 			);
 			path = beauties;
 			sourceTree = "<group>";
@@ -132,6 +141,14 @@
 				4B1366561B3EF8A100986654 /* Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		4B7AC97A1B441B1700E19056 /* CHTCollectionViewWaterfallLayout */ = {
+			isa = PBXGroup;
+			children = (
+				4B7AC97B1B441B3D00E19056 /* CHTCollectionViewWaterfallLayout.swift */,
+			);
+			name = CHTCollectionViewWaterfallLayout;
 			sourceTree = "<group>";
 		};
 		4BD0DD411B42CB8400F08CF5 /* Entiy */ = {
@@ -261,8 +278,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4B7AC9801B4423AD00E19056 /* BeautyCollectionViewCell.swift in Sources */,
 				4BD0DD431B42CBA400F08CF5 /* BeautyImageEntity.swift in Sources */,
+				4B7AC97C1B441B3D00E19056 /* CHTCollectionViewWaterfallLayout.swift in Sources */,
 				4B7AC9791B44169200E19056 /* BlurView.swift in Sources */,
+				4B7AC97E1B441DC700E19056 /* HistoryViewController.swift in Sources */,
 				4B1366441B3EF8A100986654 /* TodayViewController.swift in Sources */,
 				4B1366421B3EF8A100986654 /* AppDelegate.swift in Sources */,
 			);
