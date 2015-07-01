@@ -63,7 +63,16 @@ class TodayViewController: UIViewController {
                 let widthMatch = (widthMatches as! [NSTextCheckingResult])[0]
                 self.todayBeauty!.imageWidth = (style as NSString).substringWithRange(widthMatch.rangeAtIndex(1)).toInt()
                 
-                self.beautyImageView?.kf_setImageWithURL(NSURL(string: self.todayBeauty!.imageUrl!)!)
+                self.beautyImageView!.kf_setImageWithURL(NSURL(string: self.todayBeauty!.imageUrl!)!, placeholderImage: nil, optionsInfo: nil) { (image, error, cacheType, imageURL) -> () in
+                    if image != nil {
+                        var bgi = UIImageView(image: image!)
+                        bgi.contentMode = .ScaleToFill
+                        bgi.frame = self.view.bounds
+                        self.view.addSubview(bgi)
+                        self.view.sendSubviewToBack(bgi)
+                        bgi.applyBlurEffect()
+                    }
+                }
                 
                 self.view.setNeedsLayout()
             }
