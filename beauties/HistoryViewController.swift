@@ -8,10 +8,13 @@
 
 import Foundation
 import UIKit
+import Alamofire
 
 class HistoryViewController: UIViewController, CHTCollectionViewDelegateWaterfallLayout, UICollectionViewDelegate, UICollectionViewDataSource {
     
     var beauties: [BeautyImageEntity]
+    var beautyCollectionView: UICollectionView?
+    let sharedMargin = 10
     
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?) {
         beauties = []
@@ -23,19 +26,38 @@ class HistoryViewController: UIViewController, CHTCollectionViewDelegateWaterfal
         super.init(coder: aDecoder)
     }
     
-    @IBOutlet weak var beautyCollectionView: UICollectionView!
     override func awakeFromNib() {
         super.awakeFromNib()
         
         var collectionViewLayout = CHTCollectionViewWaterfallLayout()
         collectionViewLayout.columnCount = 2
-        collectionViewLayout.minimumColumnSpacing = 20
-        collectionViewLayout.minimumInteritemSpacing = 20
+        collectionViewLayout.minimumColumnSpacing = CGFloat(sharedMargin)
+        collectionViewLayout.minimumInteritemSpacing = CGFloat(sharedMargin)
         
-        self.beautyCollectionView.collectionViewLayout = collectionViewLayout
-        self.beautyCollectionView.delegate = self
-        self.beautyCollectionView.dataSource = self
+        self.beautyCollectionView = UICollectionView(frame: self.view.bounds, collectionViewLayout: collectionViewLayout)
+        self.beautyCollectionView!.backgroundColor = UIColor.greenColor()
+        self.beautyCollectionView!.collectionViewLayout = collectionViewLayout
+        self.beautyCollectionView!.delegate = self
+        self.beautyCollectionView!.dataSource = self
+        self.beautyCollectionView!.registerClass(BeautyCollectionViewCell.self, forCellWithReuseIdentifier: "BeautyCollectionViewCell")
+        self.view.addSubview(self.beautyCollectionView!)
+        
+        // start loading data
+        if count(beauties) == 0 {
+            // TODO: read data from files or somewhere else in local
+            let historyDates = BeautyDateUtil.generateHistoryDateString(format: BeautyDateUtil.API_FORMAT, historyCount: BeautyDateUtil.PAGE_SIZE)
+            historyDates.map(fetchData)
+        }
     }
+    
+    // MARK: fetch DATA
+    
+    func fetchData(date: String) -> Void {
+        
+        println("http://gank.io/" + date)
+        
+    }
+    
     
     // MARK: UICollectionViewDataSource
     
@@ -44,7 +66,10 @@ class HistoryViewController: UIViewController, CHTCollectionViewDelegateWaterfal
     }
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        var cell = collectionView.dequeueReusableCellWithReuseIdentifier("", forIndexPath: indexPath) as! BeautyCollectionViewCell
+        var cell = collectionView.dequeueReusableCellWithReuseIdentifier("BeautyCollectionViewCell", forIndexPath: indexPath) as! BeautyCollectionViewCell
+        var entity = beauties[indexPath.row]
+        cell.bindData(entity)
+        cell.clipsToBounds = true
         return cell
     }
     
@@ -54,6 +79,16 @@ class HistoryViewController: UIViewController, CHTCollectionViewDelegateWaterfal
     
     func collectionView (collectionView: UICollectionView,layout collectionViewLayout: UICollectionViewLayout,
         sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
-            return CGSizeZero
+        var entity = beauties[indexPath.row]
+        let width: Float = (Float(collectionView.bounds.size.width) - Float(sharedMargin) * 3) / 2
+        
+        let height = (Float(entity.imageHeight!) * width) / Float(entity.imageWidth!)
+        
+        return CGSize(width: CGFloat(width), height: CGFloat(height))
+    }
+    
+    func collectionView (collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout,
+        insetForSectionAtIndex section: NSInteger) -> UIEdgeInsets {
+        return UIEdgeInsets(top: CGFloat(20), left: CGFloat(sharedMargin), bottom: 0, right: CGFloat(sharedMargin))
     }
 }

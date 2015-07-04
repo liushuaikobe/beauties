@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+import Kingfisher
 
 class BeautyCollectionViewCell: UICollectionViewCell {
     
@@ -27,11 +28,17 @@ class BeautyCollectionViewCell: UICollectionViewCell {
     
     func commonInit() -> Void {
         clipsToBounds = false
-        layer.borderWidth = 20
+        layer.borderWidth = 10
         layer.borderColor = UIColor.whiteColor().CGColor
+//        layer.shadowColor = UIColor(red: 187 / 255.0, green: 187 / 255.0, blue: 187 / 255.0, alpha: 1).CGColor
+//        layer.shadowOffset = CGSizeMake(2, 6)
+        self.addSubview(self.imageView)
     }
     
     func bindData(entity: BeautyImageEntity) -> Void {
-        
+        self.imageView.frame = self.bounds
+        self.imageView.contentMode = .ScaleAspectFill
+        println(entity.imageUrl!)
+        self.imageView.kf_setImageWithURL(NSURL(string: entity.imageUrl!)!)
     }
 }

@@ -30,9 +30,9 @@ class TodayViewController: UIViewController {
         
         Alamofire.request(.GET, "http://gank.io/").responseString(encoding: NSUTF8StringEncoding) {
             (request, response, str, error) -> Void in
-            
+            // TODO: check error
             if let htmlContent = str {
-                
+                // TODO: check circular reference
                 self.todayBeauty = BeautyImageEntity()
                 
                 let patternString = "<img\\s+alt=\".*\"\\s+src=\"(.+)\"\\s+style=\"(.*)\"\\s*/>"
