@@ -28,42 +28,11 @@ class TodayViewController: UIViewController {
         beautyImageView!.layer.shadowOffset = CGSizeMake(2, 6)
         self.view.addSubview(beautyImageView!)
         
-        Alamofire.request(.GET, "http://gank.io/").responseString(encoding: NSUTF8StringEncoding) {
-            (request, response, str, error) -> Void in
-            // TODO: check error
-            if let htmlContent = str {
-                // TODO: check circular reference
-                self.todayBeauty = BeautyImageEntity()
-                
-                let patternString = "<img\\s+alt=\".*\"\\s+src=\"(.+)\"\\s+style=\"(.*)\"\\s*/>"
-                let regex = NSRegularExpression(pattern: patternString, options: .CaseInsensitive, error: nil)!
-                let matches = regex.matchesInString(htmlContent, options: nil, range: NSMakeRange(0, count(htmlContent)))
-                
-                let match = (matches as! [NSTextCheckingResult])[0]
-                
-                // ------------- get image url
-                let beautyUrl = (htmlContent as NSString).substringWithRange(match.rangeAtIndex(1))
-                
-                self.todayBeauty!.imageUrl = beautyUrl
-                
-                // ------------- get width and height
-                let style = (htmlContent as NSString).substringWithRange(match.rangeAtIndex(2))
-                
-                let heightPatternString = "height\\s*:\\s*(\\d+)px"
-                let widthPatterString = "width\\s*:\\s*(\\d+)px"
-                
-                let heightRegex = NSRegularExpression(pattern: heightPatternString, options: .CaseInsensitive, error: nil)!
-                let widthRegex = NSRegularExpression(pattern: widthPatterString, options: .CaseInsensitive, error: nil)!
-                
-                let heightMatches = heightRegex.matchesInString(style, options: nil, range: NSMakeRange(0, count(style)))
-                let widthMatches = widthRegex.matchesInString(style, options: nil, range: NSMakeRange(0, count(style)))
-                
-                let heightMatch = (heightMatches as! [NSTextCheckingResult])[0]
-                self.todayBeauty!.imageHeight = (style as NSString).substringWithRange(heightMatch.rangeAtIndex(1)).toInt()
-                let widthMatch = (widthMatches as! [NSTextCheckingResult])[0]
-                self.todayBeauty!.imageWidth = (style as NSString).substringWithRange(widthMatch.rangeAtIndex(1)).toInt()
-                
-                self.beautyImageView!.kf_setImageWithURL(NSURL(string: self.todayBeauty!.imageUrl!)!, placeholderImage: nil, optionsInfo: nil) { (image, error, cacheType, imageURL) -> () in
+        NetworkUtil.getTodayImage() {
+            beautyEntity in
+            self.todayBeauty = beautyEntity
+            if beautyEntity != nil {
+                self.beautyImageView!.kf_setImageWithURL(NSURL(string: beautyEntity!.imageUrl!)!, placeholderImage: nil, optionsInfo: nil) { (image, error, cacheType, imageURL) -> () in
                     if image != nil {
                         var bgi = UIImageView(image: image!)
                         bgi.contentMode = .ScaleToFill
@@ -73,7 +42,6 @@ class TodayViewController: UIViewController {
                         bgi.applyBlurEffect()
                     }
                 }
-                
                 self.view.setNeedsLayout()
             }
         }

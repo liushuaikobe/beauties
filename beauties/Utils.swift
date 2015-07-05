@@ -50,6 +50,12 @@ class NetworkUtil {
     class func getImageByDate(date: String, complete: (BeautyImageEntity?) -> Void) -> Void {
         Alamofire.request(.GET, API + date).responseString(encoding: NSUTF8StringEncoding) {
             (request, response, str, error) -> Void in
+            // ERROR
+            if error != nil {
+                println(error)
+                complete(nil)
+                return
+            }
             
             if let htmlContent = str {
                 
@@ -85,7 +91,10 @@ class NetworkUtil {
                 complete(beautyImageEntity)
             }
         }
-
+    }
+    
+    class func getTodayImage(complete: (BeautyImageEntity?) -> Void) -> Void {
+        self.getImageByDate("", complete: complete)
     }
     
 }

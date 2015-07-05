@@ -53,9 +53,13 @@ class HistoryViewController: UIViewController, CHTCollectionViewDelegateWaterfal
     // MARK: fetch DATA
     
     func fetchData(date: String) -> Void {
-        
-        println("http://gank.io/" + date)
-        
+        NetworkUtil.getImageByDate(date) {
+            beautyEntity in
+            if beautyEntity != nil {
+                self.beauties.append(beautyEntity!)
+                self.beautyCollectionView!.reloadData()
+            }
+        }
     }
     
     
