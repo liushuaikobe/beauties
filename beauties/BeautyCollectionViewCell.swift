@@ -27,11 +27,14 @@ class BeautyCollectionViewCell: UICollectionViewCell {
     }
     
     func commonInit() -> Void {
-        clipsToBounds = false
-        layer.borderWidth = 10
-        layer.borderColor = UIColor.whiteColor().CGColor
-//        layer.shadowColor = UIColor(red: 187 / 255.0, green: 187 / 255.0, blue: 187 / 255.0, alpha: 1).CGColor
-//        layer.shadowOffset = CGSizeMake(2, 6)
+        self.clipsToBounds = false
+        self.layer.borderWidth = 10
+        self.layer.borderColor = UIColor.whiteColor().CGColor
+        self.layer.shadowColor = UIColor(red: 187 / 255.0, green: 187 / 255.0, blue: 187 / 255.0, alpha: 1).CGColor
+        self.layer.shadowOpacity = 0.5
+        self.layer.shadowOffset = CGSizeMake(2, 6)
+        
+        self.imageView.clipsToBounds = true
         self.addSubview(self.imageView)
     }
     

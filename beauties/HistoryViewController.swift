@@ -29,13 +29,18 @@ class HistoryViewController: UIViewController, CHTCollectionViewDelegateWaterfal
     override func awakeFromNib() {
         super.awakeFromNib()
         
+        let statusBarHeight: CGFloat = 20
+        
         var collectionViewLayout = CHTCollectionViewWaterfallLayout()
         collectionViewLayout.columnCount = 2
         collectionViewLayout.minimumColumnSpacing = CGFloat(sharedMargin)
         collectionViewLayout.minimumInteritemSpacing = CGFloat(sharedMargin)
+        collectionViewLayout.sectionInset = UIEdgeInsets(top: 10, left: CGFloat(sharedMargin), bottom: CGRectGetHeight(self.tabBarController!.tabBar.frame) + statusBarHeight + 10 + 10, right: CGFloat(sharedMargin))
         
-        self.beautyCollectionView = UICollectionView(frame: self.view.bounds, collectionViewLayout: collectionViewLayout)
-        self.beautyCollectionView!.backgroundColor = UIColor.greenColor()
+        var frame = self.view.bounds
+        frame.origin.y += statusBarHeight
+        self.beautyCollectionView = UICollectionView(frame: frame, collectionViewLayout: collectionViewLayout)
+        self.beautyCollectionView!.backgroundColor = UIColor.clearColor()
         self.beautyCollectionView!.collectionViewLayout = collectionViewLayout
         self.beautyCollectionView!.delegate = self
         self.beautyCollectionView!.dataSource = self
@@ -57,6 +62,18 @@ class HistoryViewController: UIViewController, CHTCollectionViewDelegateWaterfal
             beautyEntity in
             if beautyEntity != nil {
                 self.beauties.append(beautyEntity!)
+                
+                if count(self.beauties) == 1 {
+                    var bgi = UIImageView(frame: self.view.bounds)
+                    bgi.contentMode = .ScaleToFill
+                    self.view.addSubview(bgi)
+                    self.view.sendSubviewToBack(bgi)
+                    
+                    bgi.kf_setImageWithURL(NSURL(string: beautyEntity!.imageUrl!)!, placeholderImage: nil, optionsInfo: nil, completionHandler: { (image, error, cacheType, imageURL) -> () in
+                        bgi.applyBlurEffect()
+                    })
+                }
+                
                 self.beautyCollectionView!.reloadData()
             }
         }
@@ -72,7 +89,6 @@ class HistoryViewController: UIViewController, CHTCollectionViewDelegateWaterfal
         var cell = collectionView.dequeueReusableCellWithReuseIdentifier("BeautyCollectionViewCell", forIndexPath: indexPath) as! BeautyCollectionViewCell
         var entity = beauties[indexPath.row]
         cell.bindData(entity)
-        cell.clipsToBounds = true
         return cell
     }
     
@@ -84,14 +100,7 @@ class HistoryViewController: UIViewController, CHTCollectionViewDelegateWaterfal
         sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
         var entity = beauties[indexPath.row]
         let width: Float = (Float(collectionView.bounds.size.width) - Float(sharedMargin) * 3) / 2
-        
         let height = (Float(entity.imageHeight!) * width) / Float(entity.imageWidth!)
-        
         return CGSize(width: CGFloat(width), height: CGFloat(height))
-    }
-    
-    func collectionView (collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout,
-        insetForSectionAtIndex section: NSInteger) -> UIEdgeInsets {
-        return UIEdgeInsets(top: CGFloat(20), left: CGFloat(sharedMargin), bottom: 0, right: CGFloat(sharedMargin))
     }
 }
