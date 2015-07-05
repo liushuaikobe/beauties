@@ -62,7 +62,6 @@ class HistoryViewController: UIViewController, CHTCollectionViewDelegateWaterfal
         }
     }
     
-    
     // MARK: UICollectionViewDataSource
     
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {

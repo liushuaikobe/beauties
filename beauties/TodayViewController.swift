@@ -47,15 +47,8 @@ class TodayViewController: UIViewController {
         }
     }
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-    }
-    
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        
-//        self.view.layer.borderColor = UIColor.redColor().CGColor
-//        self.view.layer.borderWidth = 1.0
         
         let maxHeight = Int(self.view.bounds.height) - 100
         let maxWidth = Int(self.view.bounds.width) - 40
