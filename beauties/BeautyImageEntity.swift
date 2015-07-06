@@ -8,8 +8,24 @@
 
 import Foundation
 
-class BeautyImageEntity {
+class BeautyImageEntity: NSObject, NSCoding {
     var imageUrl: String?
     var imageHeight: Int?
     var imageWidth: Int?
+    
+    override init() {
+        
+    }
+    
+    required init(coder aDecoder: NSCoder) {
+        imageUrl = aDecoder.decodeObjectForKey("imageUrl") as? String
+        imageHeight = aDecoder.decodeObjectForKey("imageHeight") as? Int
+        imageWidth = aDecoder.decodeObjectForKey("imageWidth") as? Int
+    }
+    
+    func encodeWithCoder(aCoder: NSCoder) {
+        aCoder.encodeObject(imageUrl, forKey: "imageUrl")
+        aCoder.encodeObject(imageHeight, forKey: "imageHeight")
+        aCoder.encodeObject(imageWidth, forKey: "imageWidth")
+    }
 }

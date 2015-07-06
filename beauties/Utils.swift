@@ -98,3 +98,33 @@ class NetworkUtil {
     }
     
 }
+
+class DataUtil {
+    private static let fileName = "data.dat"
+    
+    static var beautiesCache = [String: BeautyImageEntity]()
+    
+    class func saveBeauty(beauty: BeautyImageEntity, forDate date: String) {
+        beautiesCache[date] = beauty
+    }
+    
+    class func deleteBeautyForDate(date: String) {
+        beautiesCache.removeValueForKey(date)
+    }
+    
+    private class func buildFilePathWithName(name: String) -> String {
+        let manager = NSFileManager.defaultManager()
+        let dirUrl = manager.URLForDirectory(.DocumentDirectory, inDomain: .UserDomainMask, appropriateForURL: nil, create: false, error: nil)
+        return dirUrl!.URLByAppendingPathComponent(name).path!
+    }
+    
+    class func writeCacheToFile() {
+        let filePath = self.buildFilePathWithName(self.fileName)
+        NSKeyedArchiver.archiveRootObject(self.beautiesCache, toFile: filePath)
+    }
+    
+    class func readCacheFromFile() {
+        let filePath = self.buildFilePathWithName(self.fileName)
+        self.beautiesCache = NSKeyedUnarchiver.unarchiveObjectWithFile(filePath) as! [String: BeautyImageEntity]
+    }
+}
