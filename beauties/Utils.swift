@@ -48,6 +48,13 @@ class NetworkUtil {
     static let widthRegex = NSRegularExpression(pattern: widthPatterString, options: .CaseInsensitive, error: nil)!
     
     class func getImageByDate(date: String, complete: (BeautyImageEntity?) -> Void) -> Void {
+        
+        if let entity = DataUtil.findBeautyForDate(date) {
+            println("Find Cache for date: \(date)!")
+            complete(entity)
+            return
+        }
+        
         Alamofire.request(.GET, API + date).responseString(encoding: NSUTF8StringEncoding) {
             (request, response, str, error) -> Void in
             // ERROR
@@ -88,6 +95,8 @@ class NetworkUtil {
                 let widthMatch = (widthMatches as! [NSTextCheckingResult])[0]
                 beautyImageEntity.imageWidth = (style as NSString).substringWithRange(widthMatch.rangeAtIndex(1)).toInt()
                 
+                DataUtil.saveBeauty(beautyImageEntity, forDate: date)
+                
                 complete(beautyImageEntity)
             }
         }
@@ -102,10 +111,19 @@ class NetworkUtil {
 class DataUtil {
     private static let fileName = "data.dat"
     
-    static var beautiesCache = [String: BeautyImageEntity]()
+    private static var beautiesCache = [String: BeautyImageEntity]()
+    
     
     class func saveBeauty(beauty: BeautyImageEntity, forDate date: String) {
+        println("Save Entity(\(beauty)) for \(date)")
         beautiesCache[date] = beauty
+    }
+    
+    class func findBeautyForDate(date: String) -> BeautyImageEntity? {
+        if count(self.beautiesCache) == 0 {
+            self.readCacheFromFile()
+        }
+        return self.beautiesCache[date]
     }
     
     class func deleteBeautyForDate(date: String) {
@@ -119,12 +137,17 @@ class DataUtil {
     }
     
     class func writeCacheToFile() {
+        println("Write Cache into file.")
         let filePath = self.buildFilePathWithName(self.fileName)
         NSKeyedArchiver.archiveRootObject(self.beautiesCache, toFile: filePath)
     }
     
     class func readCacheFromFile() {
+        println("Read Cache from file")
         let filePath = self.buildFilePathWithName(self.fileName)
-        self.beautiesCache = NSKeyedUnarchiver.unarchiveObjectWithFile(filePath) as! [String: BeautyImageEntity]
+        
+        if let cache = NSKeyedUnarchiver.unarchiveObjectWithFile(filePath) as? [String: BeautyImageEntity] {
+            self.beautiesCache = cache
+        }
     }
 }

@@ -13,6 +13,10 @@ class BeautyImageEntity: NSObject, NSCoding {
     var imageHeight: Int?
     var imageWidth: Int?
     
+    override var description: String {
+        return "imageUrl: \(self.imageUrl), imageHeight: \(self.imageHeight), imageWidth: \(self.imageWidth)"
+    }
+    
     override init() {
         
     }
