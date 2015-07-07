@@ -34,6 +34,13 @@ class BeautyDateUtil {
         
         return result
     }
+    
+    class func todayString() -> String {
+        let today = NSDate()
+        let formatter = NSDateFormatter()
+        formatter.dateFormat = self.API_FORMAT
+        return formatter.stringFromDate(today)
+    }
 }
 
 class NetworkUtil {
@@ -103,14 +110,14 @@ class NetworkUtil {
     }
     
     class func getTodayImage(complete: (BeautyImageEntity?) -> Void) -> Void {
-        self.getImageByDate("", complete: complete)
+        self.getImageByDate(BeautyDateUtil.todayString(), complete: complete)
     }
     
 }
 
 class DataUtil {
     private static let fileName = "data.dat"
-    
+    private static var haveReadCache = false
     private static var beautiesCache = [String: BeautyImageEntity]()
     
     
@@ -120,7 +127,8 @@ class DataUtil {
     }
     
     class func findBeautyForDate(date: String) -> BeautyImageEntity? {
-        if count(self.beautiesCache) == 0 {
+        if !self.haveReadCache {
+            self.haveReadCache = true
             self.readCacheFromFile()
         }
         return self.beautiesCache[date]
