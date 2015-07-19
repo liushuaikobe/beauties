@@ -41,7 +41,6 @@ class BeautyCollectionViewCell: UICollectionViewCell {
     func bindData(entity: BeautyImageEntity) -> Void {
         self.imageView.frame = self.bounds
         self.imageView.contentMode = .ScaleAspectFill
-        println(entity.imageUrl!)
         self.imageView.kf_setImageWithURL(NSURL(string: entity.imageUrl!)!)
     }
 }

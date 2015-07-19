@@ -57,7 +57,7 @@ class NetworkUtil {
     class func getImageByDate(date: String, complete: (BeautyImageEntity?) -> Void) -> Void {
         
         if let entity = DataUtil.findBeautyForDate(date) {
-            println("Find Cache for date: \(date)!")
+            println("Hit Cache for date: \(date)!")
             complete(entity)
             return
         }
@@ -110,7 +110,25 @@ class NetworkUtil {
     }
     
     class func getTodayImage(complete: (BeautyImageEntity?) -> Void) -> Void {
-        self.getImageByDate(BeautyDateUtil.todayString(), complete: complete)
+        let todayDateStr = BeautyDateUtil.todayString()
+        self.getImageByDate(todayDateStr) {
+            entity in
+            if entity == nil {
+                if let cachedEntity = DataUtil.getLatestEntity() {
+                    complete(cachedEntity)
+                } else {
+                    // default image
+                    println("No beauty online, no cache neither. Return default beauty")
+                    let defaultEntity = BeautyImageEntity()
+                    defaultEntity.imageUrl = "http://ww4.sinaimg.cn/large/7a8aed7bgw1etv4ehu391j20f00migoi.jpg"
+                    defaultEntity.imageHeight = 825
+                    defaultEntity.imageWidth = 550
+                    complete(defaultEntity)
+                }
+            } else {
+                complete(entity)
+            }
+        }
     }
     
 }
@@ -136,6 +154,18 @@ class DataUtil {
     
     class func deleteBeautyForDate(date: String) {
         beautiesCache.removeValueForKey(date)
+    }
+    
+    class func getLatestEntity() -> BeautyImageEntity? {
+        let cachedDates = self.beautiesCache.keys.array
+        
+        if count(cachedDates) != 0 {
+            let latestDateStr = maxElement(cachedDates)
+            println("Get Latest cached entity, the Latest Date: \(latestDateStr)")
+            return self.beautiesCache[maxElement(cachedDates)]!
+        } else {
+            return nil
+        }
     }
     
     private class func buildFilePathWithName(name: String) -> String {
