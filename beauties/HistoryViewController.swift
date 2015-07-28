@@ -16,6 +16,8 @@ class HistoryViewController: UIViewController, CHTCollectionViewDelegateWaterfal
     var beautyCollectionView: UICollectionView?
     let sharedMargin = 10
     
+    var page = 1
+    
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?) {
         beauties = []
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
@@ -48,34 +50,46 @@ class HistoryViewController: UIViewController, CHTCollectionViewDelegateWaterfal
         self.view.addSubview(self.beautyCollectionView!)
         
         // start loading data
-        if count(beauties) == 0 {
-            // TODO: read data from files or somewhere else in local
-            let historyDates = BeautyDateUtil.generateHistoryDateString(format: BeautyDateUtil.API_FORMAT, historyCount: BeautyDateUtil.PAGE_SIZE)
-            historyDates.map(fetchData)
-        }
+        self.refreshData()
     }
     
     // MARK: fetch DATA
     
-    func fetchData(date: String) -> Void {
-        NetworkUtil.getImageByDate(date) {
-            beautyEntity in
-            if beautyEntity != nil {
-                self.beauties.append(beautyEntity!)
-                
-                if count(self.beauties) == 1 {
-                    var bgi = UIImageView(frame: self.view.bounds)
-                    bgi.contentMode = .ScaleToFill
-                    self.view.addSubview(bgi)
-                    self.view.sendSubviewToBack(bgi)
-                    
-                    bgi.kf_setImageWithURL(NSURL(string: beautyEntity!.imageUrl!)!, placeholderImage: nil, optionsInfo: nil, completionHandler: { (image, error, cacheType, imageURL) -> () in
-                        bgi.applyBlurEffect()
-                    })
-                }
-                
-                self.beautyCollectionView!.reloadData()
+    func refreshData() {
+        page = 1
+        self.fetchNextPage(page)
+    }
+    
+    func fetchData(args: (dispatch_queue_t, String)) {
+        dispatch_async(args.0) {
+            var beauty = NetworkUtil.getImageByDateSync(args.1)
+            if beauty != nil {
+                self.beauties.append(beauty!)
             }
+        }
+    }
+    
+    func fetchNextPage(page: Int) {
+        let historyDates = BeautyDateUtil.generateHistoryDateString(format: BeautyDateUtil.API_FORMAT, historyCount: BeautyDateUtil.PAGE_SIZE)
+        var queue: dispatch_queue_t = dispatch_queue_create("Beauty", DISPATCH_QUEUE_CONCURRENT)
+        historyDates.map({return (queue, $0)}).map(fetchData)
+        
+        dispatch_barrier_async(queue) {
+            // ----- set background blur image
+            let diceRoll = Int(arc4random_uniform(UInt32(self.beauties.count)))
+            var beautyEntity = self.beauties[0]
+            
+            var bgi = UIImageView(frame: self.view.bounds)
+            bgi.contentMode = .ScaleToFill
+            self.view.addSubview(bgi)
+            self.view.sendSubviewToBack(bgi)
+            
+            bgi.kf_setImageWithURL(NSURL(string: beautyEntity.imageUrl!)!, placeholderImage: nil, optionsInfo: nil, completionHandler: { (image, error, cacheType, imageURL) -> () in
+                bgi.applyBlurEffect()
+            })
+            
+            // ----- reload data
+            self.beautyCollectionView!.reloadData()
         }
     }
     

@@ -54,6 +54,35 @@ class NetworkUtil {
     static let widthPatterString = "width\\s*:\\s*(\\d+)px"
     static let widthRegex = NSRegularExpression(pattern: widthPatterString, options: .CaseInsensitive, error: nil)!
     
+    class func getImageByDateSync(date: String) -> BeautyImageEntity? {
+        
+        if let entity = DataUtil.findBeautyForDate(date) {
+            println("Hit Cache for date: \(date)!")
+            return entity
+        }
+        
+        let url = NSURL(string: API + date)!
+        var request = NSURLRequest(URL: url)
+        var response: AutoreleasingUnsafeMutablePointer<NSURLResponse? >= nil
+        var error: NSErrorPointer = nil
+        var data = NSURLConnection.sendSynchronousRequest(request, returningResponse: response, error: error)
+        
+//        if error.memory != nil {
+//            return nil
+//        }
+        
+        if let htmlContentData = data {
+            let htmlContent = NSString(data: htmlContentData, encoding: NSUTF8StringEncoding) as! String
+            var entity = self.getImageEntityFromHTML(htmlContent)
+            if entity != nil {
+                DataUtil.saveBeauty(entity!, forDate: date)
+            }
+            return entity
+        } else {
+            return nil
+        }
+    }
+    
     class func getImageByDate(date: String, complete: (BeautyImageEntity?) -> Void) -> Void {
         
         if let entity = DataUtil.findBeautyForDate(date) {
@@ -73,40 +102,46 @@ class NetworkUtil {
             
             if let htmlContent = str {
                 
-                var beautyImageEntity = BeautyImageEntity()
+                let beautyImageEntity = self.getImageEntityFromHTML(htmlContent)
                 
-                
-                let matches = self.regex.matchesInString(htmlContent, options: nil, range: NSMakeRange(0, count(htmlContent)))
-                
-                if count(matches) == 0 {
-                    complete(nil)
-                    return
+                if beautyImageEntity != nil {
+                    DataUtil.saveBeauty(beautyImageEntity!, forDate: date)
                 }
-                
-                let match = (matches as! [NSTextCheckingResult])[0]
-                
-                // ------------- get image url
-                let beautyUrl = (htmlContent as NSString).substringWithRange(match.rangeAtIndex(1))
-                beautyImageEntity.imageUrl = beautyUrl
-                
-                // ------------- get width and height
-                let style = (htmlContent as NSString).substringWithRange(match.rangeAtIndex(2))
-                
-                let heightMatches = self.heightRegex.matchesInString(style, options: nil, range: NSMakeRange(0, count(style)))
-                let widthMatches = self.widthRegex.matchesInString(style, options: nil, range: NSMakeRange(0, count(style)))
-                
-                // TODO: check if style exists
-                
-                let heightMatch = (heightMatches as! [NSTextCheckingResult])[0]
-                beautyImageEntity.imageHeight = (style as NSString).substringWithRange(heightMatch.rangeAtIndex(1)).toInt()
-                let widthMatch = (widthMatches as! [NSTextCheckingResult])[0]
-                beautyImageEntity.imageWidth = (style as NSString).substringWithRange(widthMatch.rangeAtIndex(1)).toInt()
-                
-                DataUtil.saveBeauty(beautyImageEntity, forDate: date)
                 
                 complete(beautyImageEntity)
             }
         }
+    }
+    
+    class func getImageEntityFromHTML(htmlContent: String) -> BeautyImageEntity? {
+        var beautyImageEntity = BeautyImageEntity()
+        
+        let matches = self.regex.matchesInString(htmlContent, options: nil, range: NSMakeRange(0, count(htmlContent)))
+        
+        if count(matches) == 0 {
+            return nil
+        }
+        
+        let match = (matches as! [NSTextCheckingResult])[0]
+        
+        // ------------- get image url
+        let beautyUrl = (htmlContent as NSString).substringWithRange(match.rangeAtIndex(1))
+        beautyImageEntity.imageUrl = beautyUrl
+        
+        // ------------- get width and height
+        let style = (htmlContent as NSString).substringWithRange(match.rangeAtIndex(2))
+        
+        let heightMatches = self.heightRegex.matchesInString(style, options: nil, range: NSMakeRange(0, count(style)))
+        let widthMatches = self.widthRegex.matchesInString(style, options: nil, range: NSMakeRange(0, count(style)))
+        
+        // TODO: check if style exists
+        
+        let heightMatch = (heightMatches as! [NSTextCheckingResult])[0]
+        beautyImageEntity.imageHeight = (style as NSString).substringWithRange(heightMatch.rangeAtIndex(1)).toInt()
+        let widthMatch = (widthMatches as! [NSTextCheckingResult])[0]
+        beautyImageEntity.imageWidth = (style as NSString).substringWithRange(widthMatch.rangeAtIndex(1)).toInt()
+        
+        return beautyImageEntity
     }
     
     class func getTodayImage(complete: (BeautyImageEntity?) -> Void) -> Void {
