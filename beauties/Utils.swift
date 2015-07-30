@@ -11,28 +11,23 @@ import Alamofire
 
 class BeautyDateUtil {
     
-    static let PAGE_SIZE = 20;
+    static let PAGE_SIZE = 20
     static let API_FORMAT = "yyyy/MM/dd"
+    static let MAX_PAGE = 5
     
-    class func generateHistoryDateString(#format: String, historyCount: Int) -> [String] {
+    class func generateHistoryDateString(page: Int) -> [String] {
+        return self.generateHistoryDateString(format: self.API_FORMAT, historyCount: self.PAGE_SIZE, page: page)
+    }
+    
+    class func generateHistoryDateString(#format: String, historyCount: Int, page: Int) -> [String] {
         
         let today = NSDate()
         let calendar = NSCalendar.currentCalendar()
         let formatter = NSDateFormatter()
         formatter.dateFormat = format
         
-        var result: [String] = []
-        
-        // TODO: rewite with map
-        
-        for i in 0...historyCount {
-            let nDaysAgo = calendar.dateByAddingUnit(.CalendarUnitDay, value: -i, toDate: today, options: nil)
-            if nDaysAgo != nil {
-                result.append(formatter.stringFromDate(nDaysAgo!))
-            }
-        }
-        
-        return result
+        let unit = ((page - 1) * self.PAGE_SIZE)...(page * self.PAGE_SIZE - 1)
+        return unit.map({calendar.dateByAddingUnit(.CalendarUnitDay, value: -$0, toDate: today, options: nil)}).filter({$0 != nil}).map({formatter.stringFromDate($0!)})
     }
     
     class func todayString() -> String {

@@ -70,14 +70,14 @@ class HistoryViewController: UIViewController, CHTCollectionViewDelegateWaterfal
     }
     
     func fetchNextPage(page: Int) {
-        let historyDates = BeautyDateUtil.generateHistoryDateString(format: BeautyDateUtil.API_FORMAT, historyCount: BeautyDateUtil.PAGE_SIZE)
+        let historyDates = BeautyDateUtil.generateHistoryDateString(page)
         var queue: dispatch_queue_t = dispatch_queue_create("Beauty", DISPATCH_QUEUE_CONCURRENT)
         historyDates.map({return (queue, $0)}).map(fetchData)
         
         dispatch_barrier_async(queue) {
             // ----- set background blur image
             let diceRoll = Int(arc4random_uniform(UInt32(self.beauties.count)))
-            var beautyEntity = self.beauties[0]
+            var beautyEntity = self.beauties[diceRoll]
             
             var bgi = UIImageView(frame: self.view.bounds)
             bgi.contentMode = .ScaleToFill
