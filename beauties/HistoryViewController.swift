@@ -91,8 +91,7 @@ class HistoryViewController: UIViewController, CHTCollectionViewDelegateWaterfal
             // ----- increment page by 1
             self.page += 1
             // ----- set background blur image
-            let diceRoll = Int(arc4random_uniform(UInt32(self.beauties.count)))
-            var beautyEntity = self.beauties[diceRoll]
+            var beautyEntity = self.beauties[Int(count(self.beauties) / 2)]
             
             var bgi = UIImageView(frame: self.view.bounds)
             bgi.contentMode = .ScaleToFill
