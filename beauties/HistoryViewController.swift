@@ -10,14 +10,16 @@ import Foundation
 import UIKit
 import Alamofire
 
-class HistoryViewController: UIViewController, CHTCollectionViewDelegateWaterfallLayout, UICollectionViewDelegate, UICollectionViewDataSource {
+class HistoryViewController: UIViewController, CHTCollectionViewDelegateWaterfallLayout, UICollectionViewDelegate, UICollectionViewDataSource, UIScrollViewDelegate {
     
-    var beauties: [BeautyImageEntity]
+    // ---------------- Views
     var beautyCollectionView: UICollectionView?
     var refreshControl: UIRefreshControl?
+    // ---------------- Data
+    var beauties: [BeautyImageEntity]
     let sharedMargin = 10
-    
     var page = 1
+    var isLoadingNow = false
     
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?) {
         beauties = []
@@ -76,11 +78,18 @@ class HistoryViewController: UIViewController, CHTCollectionViewDelegateWaterfal
     }
     
     func fetchNextPage(page: Int) {
+        if (self.isLoadingNow || self.page > BeautyDateUtil.MAX_PAGE) {
+            return
+        }
+        self.isLoadingNow = true
+        println("fetch data for page --> \(page)")
         let historyDates = BeautyDateUtil.generateHistoryDateString(page)
         var queue: dispatch_queue_t = dispatch_queue_create("Beauty", DISPATCH_QUEUE_CONCURRENT)
         historyDates.map({return (queue, $0)}).map(fetchData)
         
         dispatch_barrier_async(queue) {
+            // ----- increment page by 1
+            self.page += 1
             // ----- set background blur image
             let diceRoll = Int(arc4random_uniform(UInt32(self.beauties.count)))
             var beautyEntity = self.beauties[diceRoll]
@@ -97,6 +106,15 @@ class HistoryViewController: UIViewController, CHTCollectionViewDelegateWaterfal
             // ----- reload data
             self.refreshControl!.endRefreshing()
             self.beautyCollectionView!.reloadData()
+            
+            self.isLoadingNow = false
+        }
+    }
+    
+    // MARK: UIScrollViewDelegate
+    func scrollViewDidEndDragging(scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        if (scrollView.contentOffset.y + CGRectGetHeight(scrollView.bounds) > scrollView.contentSize.height) {
+            self.fetchNextPage(self.page)
         }
     }
     
