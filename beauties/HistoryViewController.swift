@@ -14,6 +14,7 @@ class HistoryViewController: UIViewController, CHTCollectionViewDelegateWaterfal
     
     var beauties: [BeautyImageEntity]
     var beautyCollectionView: UICollectionView?
+    var refreshControl: UIRefreshControl?
     let sharedMargin = 10
     
     var page = 1
@@ -49,6 +50,10 @@ class HistoryViewController: UIViewController, CHTCollectionViewDelegateWaterfal
         self.beautyCollectionView!.registerClass(BeautyCollectionViewCell.self, forCellWithReuseIdentifier: "BeautyCollectionViewCell")
         self.view.addSubview(self.beautyCollectionView!)
         
+        self.refreshControl = UIRefreshControl()
+        self.refreshControl!.addTarget(self, action: Selector("refreshData"), forControlEvents: .ValueChanged)
+        self.beautyCollectionView!.addSubview(self.refreshControl!)
+        
         // start loading data
         self.refreshData()
     }
@@ -57,6 +62,7 @@ class HistoryViewController: UIViewController, CHTCollectionViewDelegateWaterfal
     
     func refreshData() {
         page = 1
+        self.beauties.removeAll(keepCapacity: false)
         self.fetchNextPage(page)
     }
     
@@ -89,6 +95,7 @@ class HistoryViewController: UIViewController, CHTCollectionViewDelegateWaterfal
             })
             
             // ----- reload data
+            self.refreshControl!.endRefreshing()
             self.beautyCollectionView!.reloadData()
         }
     }
