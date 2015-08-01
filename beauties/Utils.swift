@@ -129,12 +129,14 @@ class NetworkUtil {
         let heightMatches = self.heightRegex.matchesInString(style, options: nil, range: NSMakeRange(0, count(style)))
         let widthMatches = self.widthRegex.matchesInString(style, options: nil, range: NSMakeRange(0, count(style)))
         
-        // TODO: check if style exists
-        
-        let heightMatch = (heightMatches as! [NSTextCheckingResult])[0]
-        beautyImageEntity.imageHeight = (style as NSString).substringWithRange(heightMatch.rangeAtIndex(1)).toInt()
-        let widthMatch = (widthMatches as! [NSTextCheckingResult])[0]
-        beautyImageEntity.imageWidth = (style as NSString).substringWithRange(widthMatch.rangeAtIndex(1)).toInt()
+        if count(heightMatches) > 0 {
+            let heightMatch = (heightMatches as! [NSTextCheckingResult])[0]
+            beautyImageEntity.imageHeight = (style as NSString).substringWithRange(heightMatch.rangeAtIndex(1)).toInt()
+        }
+        if count(widthMatches) > 0 {
+            let widthMatch = (widthMatches as! [NSTextCheckingResult])[0]
+            beautyImageEntity.imageWidth = (style as NSString).substringWithRange(widthMatch.rangeAtIndex(1)).toInt()
+        }
         
         return beautyImageEntity
     }

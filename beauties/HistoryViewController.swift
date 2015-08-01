@@ -125,12 +125,18 @@ class HistoryViewController: UIViewController, CHTCollectionViewDelegateWaterfal
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         var cell = collectionView.dequeueReusableCellWithReuseIdentifier("BeautyCollectionViewCell", forIndexPath: indexPath) as! BeautyCollectionViewCell
-        var entity = beauties[indexPath.row]
-        cell.bindData(entity)
+        if (indexPath.row < count(beauties)) {
+            var entity = beauties[indexPath.row]
+            cell.bindData(entity)
+        }
         return cell
     }
     
     // MARK: UICollectionViewDelegate
+    
+    func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
+        println("\(indexPath.row)")
+    }
     
     // MARK: CHTCollectionViewDelegateWaterfallLayout
     
@@ -138,7 +144,12 @@ class HistoryViewController: UIViewController, CHTCollectionViewDelegateWaterfal
         sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
         var entity = beauties[indexPath.row]
         let width: Float = (Float(collectionView.bounds.size.width) - Float(sharedMargin) * 3) / 2
-        let height = (Float(entity.imageHeight!) * width) / Float(entity.imageWidth!)
+        
+        var height:Float = 200.0
+        if entity.imageHeight != nil && entity.imageWidth != nil {
+            height = (Float(entity.imageHeight!) * width) / Float(entity.imageWidth!)
+        }
+            
         return CGSize(width: CGFloat(width), height: CGFloat(height))
     }
 }

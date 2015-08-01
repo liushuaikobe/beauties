@@ -28,8 +28,14 @@ class BeautyImageEntity: NSObject, NSCoding {
     }
     
     func encodeWithCoder(aCoder: NSCoder) {
-        aCoder.encodeObject(imageUrl, forKey: "imageUrl")
-        aCoder.encodeObject(imageHeight, forKey: "imageHeight")
-        aCoder.encodeObject(imageWidth, forKey: "imageWidth")
+        if imageUrl != nil {
+            aCoder.encodeObject(imageUrl, forKey: "imageUrl")
+        }
+        if imageHeight != nil {
+            aCoder.encodeObject(imageHeight, forKey: "imageHeight")
+        }
+        if imageWidth != nil {
+            aCoder.encodeObject(imageWidth, forKey: "imageWidth")
+        }
     }
 }
