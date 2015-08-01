@@ -62,9 +62,10 @@ class NetworkUtil {
         var error: NSErrorPointer = nil
         var data = NSURLConnection.sendSynchronousRequest(request, returningResponse: response, error: error)
         
-//        if error.memory != nil {
-//            return nil
-//        }
+        if error != nil && error.memory != nil {
+            println("ERROR: \(error.memory)")
+            return nil
+        }
         
         if let htmlContentData = data {
             let htmlContent = NSString(data: htmlContentData, encoding: NSUTF8StringEncoding) as! String
