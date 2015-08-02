@@ -46,6 +46,9 @@ class TodayViewController: UIViewController {
             beautyImageView.addGestureRecognizer(swipeGesture)
         }
         
+        var longPressGenture = UILongPressGestureRecognizer(target: self, action: "onLongPress:")
+        beautyImageView.addGestureRecognizer(longPressGenture)
+        
         var setImage: BeautyImageEntity -> Void = {
             if let imageURLString = $0.imageUrl {
                 if let imageURL = NSURL(string: imageURLString) {
@@ -79,6 +82,10 @@ class TodayViewController: UIViewController {
         }
     }
     
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+    }
+    
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
@@ -105,8 +112,45 @@ class TodayViewController: UIViewController {
         }
     }
     
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
+    func onLongPress(sender: UILongPressGestureRecognizer) {
+        if sender.state == .Began {
+            let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .ActionSheet)
+            
+            let cancelAction = UIAlertAction(title: "取消", style: .Cancel, handler: nil)
+            alertController.addAction(cancelAction)
+            
+            let saveAction = UIAlertAction(title: "保存", style: .Default, handler: {
+                (action) -> Void in
+                if let image = self.beautyImageView.image {
+                    UIImageWriteToSavedPhotosAlbum(image, self, "saveImageFinished:error:contextInfo:", nil)
+                }
+            })
+            alertController.addAction(saveAction)
+            
+            let shareAction = UIAlertAction(title: "分享", style: .Default, handler: {
+                (action) -> Void in
+                
+            })
+            alertController.addAction(shareAction)
+            
+            self.presentViewController(alertController, animated: true, completion: nil)
+        }
+    }
+    
+    func saveImageFinished(image: UIImage, error: NSErrorPointer, contextInfo: UnsafePointer<()>) {
+        var message = "保存成功 (ฅ´ω`ฅ)"
+        var OKTitle = "好的"
+        if error != nil {
+            println(error.memory)
+            message = "保存失败 (´◔ ‸◔')"
+            OKTitle = "好吧"
+        }
+        let alertController = UIAlertController(title: nil, message: message, preferredStyle: .Alert)
+        
+        let OKAction = UIAlertAction(title: OKTitle, style: .Default, handler: nil)
+        alertController.addAction(OKAction)
+        
+        self.presentViewController(alertController, animated: true, completion: nil)
     }
 }
 
