@@ -135,11 +135,11 @@ class HistoryViewController: UIViewController, CHTCollectionViewDelegateWaterfal
     // MARK: UICollectionViewDelegate
     
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
-        println("\(indexPath.row)")
         if (indexPath.row < count(self.beauties)) {
             var entity = self.beauties[indexPath.row]
             var todayViewController = TodayViewController()
             todayViewController.todayBeauty = entity
+            todayViewController.canBeClosed = true
             self.presentViewController(todayViewController, animated: true, completion: nil)
         }
     }
