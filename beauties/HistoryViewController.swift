@@ -136,6 +136,12 @@ class HistoryViewController: UIViewController, CHTCollectionViewDelegateWaterfal
     
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
         println("\(indexPath.row)")
+        if (indexPath.row < count(self.beauties)) {
+            var entity = self.beauties[indexPath.row]
+            var todayViewController = TodayViewController()
+            todayViewController.todayBeauty = entity
+            self.presentViewController(todayViewController, animated: true, completion: nil)
+        }
     }
     
     // MARK: CHTCollectionViewDelegateWaterfallLayout

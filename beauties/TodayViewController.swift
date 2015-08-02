@@ -17,10 +17,8 @@ class TodayViewController: UIViewController {
     
     var todayBeauty: BeautyImageEntity?
     
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        
-        println("Today VC awakeFromNib")
+    override func viewDidLoad() {
+        super.viewDidLoad()
         
         beautyImageView = UIImageView()
         beautyImageView.layer.borderColor = UIColor.whiteColor().CGColor
