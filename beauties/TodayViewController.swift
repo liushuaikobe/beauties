@@ -13,36 +13,52 @@ import Kingfisher
 
 class TodayViewController: UIViewController {
 
-    var beautyImageView: UIImageView?
+    var beautyImageView: UIImageView!
     
     var todayBeauty: BeautyImageEntity?
     
     override func awakeFromNib() {
         super.awakeFromNib()
         
+        println("Today VC awakeFromNib")
+        
         beautyImageView = UIImageView()
-        beautyImageView!.layer.borderColor = UIColor.whiteColor().CGColor
-        beautyImageView!.layer.borderWidth = 10
-        beautyImageView!.layer.shadowOpacity = 0.5
-        beautyImageView!.layer.shadowColor = UIColor(red: 187 / 255.0, green: 187 / 255.0, blue: 187 / 255.0, alpha: 1).CGColor
-        beautyImageView!.layer.shadowOffset = CGSizeMake(2, 6)
-        self.view.addSubview(beautyImageView!)
+        beautyImageView.layer.borderColor = UIColor.whiteColor().CGColor
+        beautyImageView.layer.borderWidth = 10
+        beautyImageView.layer.shadowOpacity = 0.5
+        beautyImageView.layer.shadowColor = UIColor(red: 187 / 255.0, green: 187 / 255.0, blue: 187 / 255.0, alpha: 1).CGColor
+        beautyImageView.layer.shadowOffset = CGSizeMake(2, 6)
+        self.view.addSubview(beautyImageView)
+        
+        var setImage: BeautyImageEntity -> Void = {
+            if let imageURLString = $0.imageUrl {
+                if let imageURL = NSURL(string: imageURLString) {
+                    self.beautyImageView.kf_setImageWithURL(imageURL, placeholderImage: nil, optionsInfo: nil) {
+                        (image, error, cacheType, imageURL) -> () in
+                        if image != nil {
+                            var bgi = UIImageView(image: image!)
+                            bgi.contentMode = .ScaleToFill
+                            bgi.frame = self.view.bounds
+                            self.view.addSubview(bgi)
+                            self.view.sendSubviewToBack(bgi)
+                            bgi.applyBlurEffect()
+                        }
+                    }
+                    self.view.setNeedsLayout()
+                }
+            }
+        };
+        
+        if todayBeauty != nil {
+            setImage(todayBeauty!)
+            return
+        }
         
         NetworkUtil.getTodayImage() {
             beautyEntity in
             self.todayBeauty = beautyEntity
             if beautyEntity != nil {
-                self.beautyImageView!.kf_setImageWithURL(NSURL(string: beautyEntity!.imageUrl!)!, placeholderImage: nil, optionsInfo: nil) { (image, error, cacheType, imageURL) -> () in
-                    if image != nil {
-                        var bgi = UIImageView(image: image!)
-                        bgi.contentMode = .ScaleToFill
-                        bgi.frame = self.view.bounds
-                        self.view.addSubview(bgi)
-                        self.view.sendSubviewToBack(bgi)
-                        bgi.applyBlurEffect()
-                    }
-                }
-                self.view.setNeedsLayout()
+                setImage(beautyEntity!)
             }
         }
     }
@@ -64,10 +80,10 @@ class TodayViewController: UIViewController {
                 preferWidth = Int(preferHeight * self.todayBeauty!.imageWidth! / self.todayBeauty!.imageHeight!)
             }
             
-            self.beautyImageView!.frame = CGRect(origin: CGPointZero, size: CGSize(width: preferWidth, height: preferHeight))
+            self.beautyImageView.frame = CGRect(origin: CGPointZero, size: CGSize(width: preferWidth, height: preferHeight))
         }
         
-        self.beautyImageView!.center = CGPointMake(CGRectGetMidX(self.view.bounds), CGRectGetMidY(self.view.bounds) - 50)
+        self.beautyImageView.center = CGPointMake(CGRectGetMidX(self.view.bounds), CGRectGetMidY(self.view.bounds) - 50)
         
     }
 

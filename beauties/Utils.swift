@@ -80,31 +80,10 @@ class NetworkUtil {
     }
     
     class func getImageByDate(date: String, complete: (BeautyImageEntity?) -> Void) -> Void {
-        
-        if let entity = DataUtil.findBeautyForDate(date) {
-            println("Hit Cache for date: \(date)!")
-            complete(entity)
-            return
-        }
-        
-        Alamofire.request(.GET, API + date).responseString(encoding: NSUTF8StringEncoding) {
-            (request, response, str, error) -> Void in
-            // ERROR
-            if error != nil {
-                println(error)
-                complete(nil)
-                return
-            }
-            
-            if let htmlContent = str {
-                
-                let beautyImageEntity = self.getImageEntityFromHTML(htmlContent)
-                
-                if beautyImageEntity != nil {
-                    DataUtil.saveBeauty(beautyImageEntity!, forDate: date)
-                }
-                
-                complete(beautyImageEntity)
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
+            var entity = self.getImageByDateSync(date)
+            dispatch_async(dispatch_get_main_queue()) {
+                complete(entity)
             }
         }
     }
