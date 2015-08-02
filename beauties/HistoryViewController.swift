@@ -13,8 +13,8 @@ import Alamofire
 class HistoryViewController: UIViewController, CHTCollectionViewDelegateWaterfallLayout, UICollectionViewDelegate, UICollectionViewDataSource, UIScrollViewDelegate {
     
     // ---------------- Views
-    var beautyCollectionView: UICollectionView?
-    var refreshControl: UIRefreshControl?
+    var beautyCollectionView: UICollectionView!
+    var refreshControl: UIRefreshControl!
     // ---------------- Data
     var beauties: [BeautyImageEntity]
     let sharedMargin = 10
@@ -45,16 +45,17 @@ class HistoryViewController: UIViewController, CHTCollectionViewDelegateWaterfal
         var frame = self.view.bounds
         frame.origin.y += statusBarHeight
         self.beautyCollectionView = UICollectionView(frame: frame, collectionViewLayout: collectionViewLayout)
-        self.beautyCollectionView!.backgroundColor = UIColor.clearColor()
-        self.beautyCollectionView!.collectionViewLayout = collectionViewLayout
-        self.beautyCollectionView!.delegate = self
-        self.beautyCollectionView!.dataSource = self
-        self.beautyCollectionView!.registerClass(BeautyCollectionViewCell.self, forCellWithReuseIdentifier: "BeautyCollectionViewCell")
+        self.beautyCollectionView.alwaysBounceVertical = true
+        self.beautyCollectionView.backgroundColor = UIColor.clearColor()
+        self.beautyCollectionView.collectionViewLayout = collectionViewLayout
+        self.beautyCollectionView.delegate = self
+        self.beautyCollectionView.dataSource = self
+        self.beautyCollectionView.registerClass(BeautyCollectionViewCell.self, forCellWithReuseIdentifier: "BeautyCollectionViewCell")
         self.view.addSubview(self.beautyCollectionView!)
         
         self.refreshControl = UIRefreshControl()
-        self.refreshControl!.addTarget(self, action: Selector("refreshData"), forControlEvents: .ValueChanged)
-        self.beautyCollectionView!.addSubview(self.refreshControl!)
+        self.refreshControl.addTarget(self, action: Selector("refreshData"), forControlEvents: .ValueChanged)
+        self.beautyCollectionView.addSubview(self.refreshControl)
         
         // start loading data
         self.refreshData()
@@ -91,20 +92,23 @@ class HistoryViewController: UIViewController, CHTCollectionViewDelegateWaterfal
             // ----- increment page by 1
             self.page += 1
             // ----- set background blur image
-            var beautyEntity = self.beauties[Int(count(self.beauties) / 2)]
+            if count(self.beauties) > 0 {
             
-            var bgi = UIImageView(frame: self.view.bounds)
-            bgi.contentMode = .ScaleToFill
-            self.view.addSubview(bgi)
-            self.view.sendSubviewToBack(bgi)
-            
-            bgi.kf_setImageWithURL(NSURL(string: beautyEntity.imageUrl!)!, placeholderImage: nil, optionsInfo: nil, completionHandler: { (image, error, cacheType, imageURL) -> () in
-                bgi.applyBlurEffect()
-            })
+                var beautyEntity = self.beauties[0]
+                
+                var bgi = UIImageView(frame: self.view.bounds)
+                bgi.contentMode = .ScaleToFill
+                self.view.addSubview(bgi)
+                self.view.sendSubviewToBack(bgi)
+                
+                bgi.kf_setImageWithURL(NSURL(string: beautyEntity.imageUrl!)!, placeholderImage: nil, optionsInfo: nil, completionHandler: { (image, error, cacheType, imageURL) -> () in
+                    bgi.applyBlurEffect()
+                })
+            }
             
             // ----- reload data
-            self.refreshControl!.endRefreshing()
-            self.beautyCollectionView!.reloadData()
+            self.refreshControl.endRefreshing()
+            self.beautyCollectionView.reloadData()
             
             self.isLoadingNow = false
         }
