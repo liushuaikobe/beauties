@@ -121,20 +121,52 @@ class TodayViewController: UIViewController {
             
             let saveAction = UIAlertAction(title: "保存", style: .Default, handler: {
                 (action) -> Void in
-                if let image = self.beautyImageView.image {
-                    UIImageWriteToSavedPhotosAlbum(image, self, "saveImageFinished:error:contextInfo:", nil)
-                }
+                self.saveImage(forSharing: false)
             })
             alertController.addAction(saveAction)
             
             let shareAction = UIAlertAction(title: "分享", style: .Default, handler: {
                 (action) -> Void in
-                
+                self.saveImage(forSharing: true)
             })
             alertController.addAction(shareAction)
             
             self.presentViewController(alertController, animated: true, completion: nil)
         }
+    }
+    
+    func saveImage(#forSharing: Bool) {
+        if let image = self.beautyImageView.image {
+            
+            let selector = forSharing ? Selector("saveImageFinishedForSharing:error:contextInfo:") : Selector("saveImageFinished:error:contextInfo:")
+            
+            UIImageWriteToSavedPhotosAlbum(image, self, selector, nil)
+        }
+    }
+    
+    func saveImageFinishedForSharing(image: UIImage, error: NSErrorPointer, contextInfo: UnsafePointer<()>) {
+        var message = "图片已保存到相册，去分享吧 ლ(・∀・ )ლ"
+        var OKTitle = "先这样"
+        
+        let alertController = UIAlertController(title: nil, message: message, preferredStyle: .Alert)
+        
+        if error != nil {
+            println(error.memory)
+            message = "保存失败 (#ﾟДﾟ)"
+            OKTitle = "好吧"
+        } else {
+            let gotoWeChatAction = UIAlertAction(title: "直接分享到微信", style: .Default, handler: {
+                (action) -> Void in
+                UIApplication.sharedApplication().openURL(NSURL(string: "weixin://")!)
+            })
+            alertController.addAction(gotoWeChatAction)
+        }
+        
+        let OKAction = UIAlertAction(title: OKTitle, style: .Default, handler: nil)
+        alertController.addAction(OKAction)
+        
+        
+        self.presentViewController(alertController, animated: true, completion: nil)
     }
     
     func saveImageFinished(image: UIImage, error: NSErrorPointer, contextInfo: UnsafePointer<()>) {
