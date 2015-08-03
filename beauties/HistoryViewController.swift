@@ -33,6 +33,7 @@ class HistoryViewController: UIViewController, CHTCollectionViewDelegateWaterfal
     
     override func awakeFromNib() {
         super.awakeFromNib()
+        self.view.backgroundColor = UIColor(red: CGFloat(163 / 255.0), green: CGFloat(191 / 255.0), blue: CGFloat(168 / 255.0), alpha: 1)
         
         let statusBarHeight: CGFloat = 20
         

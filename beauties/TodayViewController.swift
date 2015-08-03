@@ -14,6 +14,7 @@ import Kingfisher
 class TodayViewController: UIViewController {
 
     var beautyImageView: UIImageView!
+    var loadingIndicator: UIActivityIndicatorView!
     
     var todayBeauty: BeautyImageEntity?
     var canBeClosed: Bool
@@ -30,6 +31,12 @@ class TodayViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.view.backgroundColor = UIColor(red: CGFloat(163 / 255.0), green: CGFloat(191 / 255.0), blue: CGFloat(168 / 255.0), alpha: 1)
+        
+        loadingIndicator = UIActivityIndicatorView(activityIndicatorStyle: .Gray)
+        loadingIndicator.hidesWhenStopped = true
+        self.view.addSubview(loadingIndicator)
+        loadingIndicator.startAnimating()
         
         beautyImageView = UIImageView()
         beautyImageView.userInteractionEnabled = true
@@ -54,6 +61,7 @@ class TodayViewController: UIViewController {
                 if let imageURL = NSURL(string: imageURLString) {
                     self.beautyImageView.kf_setImageWithURL(imageURL, placeholderImage: nil, optionsInfo: nil) {
                         (image, error, cacheType, imageURL) -> () in
+                        self.loadingIndicator.stopAnimating()
                         if image != nil {
                             var bgi = UIImageView(image: image!)
                             bgi.contentMode = .ScaleToFill
@@ -88,6 +96,10 @@ class TodayViewController: UIViewController {
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
+        
+        if (loadingIndicator.isAnimating()) {
+            loadingIndicator.center = CGPointMake(CGRectGetMidX(self.view.bounds), CGRectGetMidY(self.view.bounds))
+        }
         
         let maxHeight = Int(self.view.bounds.height) - 100
         let maxWidth = Int(self.view.bounds.width) - 40
