@@ -84,12 +84,13 @@ class HistoryViewController: UIViewController, CHTCollectionViewDelegateWaterfal
             return
         }
         self.isLoadingNow = true
-        println("fetch data for page --> \(page)")
+        println("---------- Starting Page \(page) ----------")
         let historyDates = BeautyDateUtil.generateHistoryDateString(page)
         var queue: dispatch_queue_t = dispatch_queue_create("Beauty", DISPATCH_QUEUE_CONCURRENT)
         historyDates.map({return (queue, $0)}).map(fetchData)
         
         dispatch_barrier_async(queue) {
+            println("---------- Finished Page \(page) ----------")
             // ----- increment page by 1
             self.page += 1
             // ----- set background blur image
