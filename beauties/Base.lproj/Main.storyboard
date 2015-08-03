@@ -65,7 +65,7 @@
         <!--更多-->
         <scene sceneID="tkG-C3-IY6">
             <objects>
-                <tableViewController title="Beauties" id="cB3-XF-lPP" userLabel="更多" sceneMemberID="viewController">
+                <tableViewController title="Beauties" id="cB3-XF-lPP" userLabel="更多" customClass="MoreViewController" customModule="beauties" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" separatorStyle="default" rowHeight="60" sectionHeaderHeight="22" sectionFooterHeight="22" id="0kq-6A-vVV">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -103,12 +103,6 @@
                                         <connections>
                                             <segue destination="UUY-7P-pQR" kind="show" id="VRl-iG-6az"/>
                                         </connections>
-                                    </tableViewCell>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="sCp-0s-8vj">
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="sCp-0s-8vj" id="wg6-RH-onD">
-                                            <autoresizingMask key="autoresizingMask"/>
-                                        </tableViewCellContentView>
                                     </tableViewCell>
                                 </cells>
                             </tableViewSection>
