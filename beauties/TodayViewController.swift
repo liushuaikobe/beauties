@@ -59,19 +59,19 @@ class TodayViewController: UIViewController {
         var setImage: BeautyImageEntity -> Void = {
             if let imageURLString = $0.imageUrl {
                 if let imageURL = NSURL(string: imageURLString) {
-                    self.beautyImageView.kf_setImageWithURL(imageURL, placeholderImage: nil, optionsInfo: nil) {
-                        (image, error, cacheType, imageURL) -> () in
-                        self.loadingIndicator.stopAnimating()
-                        if image != nil {
-                            var bgi = UIImageView(image: image!)
-                            bgi.contentMode = .ScaleToFill
-                            bgi.frame = self.view.bounds
-                            self.view.addSubview(bgi)
-                            self.view.sendSubviewToBack(bgi)
-                            bgi.applyBlurEffect()
+                    self.beautyImageView.alpha = 0
+                    KingfisherManager.sharedManager.retrieveImageWithURL(imageURL, optionsInfo: nil, progressBlock: nil, completionHandler: {
+                        [weak self](image, error, cacheType, imageURL) -> () in
+                        self?.loadingIndicator.stopAnimating()
+                        if let beauty = image {
+                            self?.beautyImageView.image = beauty
+                            self?.setBackgroundImage(beauty)
+                            UIView.animateWithDuration(0.7, delay: 0, options: .CurveEaseIn, animations: {
+                                self?.beautyImageView.alpha = 1
+                            }, completion: nil)
                         }
-                    }
-                    self.view.setNeedsLayout()
+                        self?.view.setNeedsLayout()
+                    })
                 }
             }
         };
@@ -145,6 +145,15 @@ class TodayViewController: UIViewController {
             
             self.presentViewController(alertController, animated: true, completion: nil)
         }
+    }
+    
+    func setBackgroundImage(image: UIImage) {
+        var bgi = UIImageView(image: image)
+        bgi.contentMode = .ScaleToFill
+        bgi.frame = self.view.bounds
+        self.view.addSubview(bgi)
+        self.view.sendSubviewToBack(bgi)
+        bgi.applyBlurEffect()
     }
     
     func saveImage() {
