@@ -15,6 +15,7 @@ class HistoryViewController: UIViewController, CHTCollectionViewDelegateWaterfal
     // ---------------- Views
     var beautyCollectionView: UICollectionView!
     var refreshControl: UIRefreshControl!
+    var collectionViewLayout :CHTCollectionViewWaterfallLayout!
     // ---------------- Data
     var beauties: [BeautyImageEntity]
     let sharedMargin = 10
@@ -34,14 +35,16 @@ class HistoryViewController: UIViewController, CHTCollectionViewDelegateWaterfal
     override func awakeFromNib() {
         super.awakeFromNib()
         self.view.backgroundColor = UIColor(red: CGFloat(163 / 255.0), green: CGFloat(191 / 255.0), blue: CGFloat(168 / 255.0), alpha: 1)
+        self.automaticallyAdjustsScrollViewInsets = true
         
         let statusBarHeight: CGFloat = 20
         
-        var collectionViewLayout = CHTCollectionViewWaterfallLayout()
+        collectionViewLayout = CHTCollectionViewWaterfallLayout()
         collectionViewLayout.columnCount = 2
         collectionViewLayout.minimumColumnSpacing = CGFloat(sharedMargin)
         collectionViewLayout.minimumInteritemSpacing = CGFloat(sharedMargin)
         collectionViewLayout.sectionInset = UIEdgeInsets(top: 10, left: CGFloat(sharedMargin), bottom: CGRectGetHeight(self.tabBarController!.tabBar.frame) + statusBarHeight + 10 + 10, right: CGFloat(sharedMargin))
+        collectionViewLayout.footerHeight = 50
         
         var frame = self.view.bounds
         frame.origin.y += statusBarHeight
@@ -52,6 +55,7 @@ class HistoryViewController: UIViewController, CHTCollectionViewDelegateWaterfal
         self.beautyCollectionView.delegate = self
         self.beautyCollectionView.dataSource = self
         self.beautyCollectionView.registerClass(BeautyCollectionViewCell.self, forCellWithReuseIdentifier: "BeautyCollectionViewCell")
+        self.beautyCollectionView.registerClass(BeautyCollectionViewFooter.self, forSupplementaryViewOfKind:collectionViewLayout.CHTCollectionElementKindSectionFooter, withReuseIdentifier: "BeautyCollectionViewFoooter")
         self.view.addSubview(self.beautyCollectionView!)
         
         self.refreshControl = UIRefreshControl()
@@ -80,7 +84,11 @@ class HistoryViewController: UIViewController, CHTCollectionViewDelegateWaterfal
     }
     
     func fetchNextPage(page: Int) {
-        if (self.isLoadingNow || self.page > BeautyDateUtil.MAX_PAGE) {
+        if (self.page > BeautyDateUtil.MAX_PAGE) {
+            collectionViewLayout.footerHeight = 0
+            return
+        }
+        if (self.isLoadingNow) {
             return
         }
         self.isLoadingNow = true
@@ -136,6 +144,14 @@ class HistoryViewController: UIViewController, CHTCollectionViewDelegateWaterfal
             cell.bindData(entity)
         }
         return cell
+    }
+    
+    func collectionView(collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, atIndexPath indexPath: NSIndexPath) -> UICollectionReusableView {
+        let footer: BeautyCollectionViewFooter = collectionView.dequeueReusableSupplementaryViewOfKind(kind, withReuseIdentifier: "BeautyCollectionViewFoooter", forIndexPath: indexPath) as! BeautyCollectionViewFooter
+        if (kind == collectionViewLayout.CHTCollectionElementKindSectionFooter) {
+            footer.startAnimating()
+        }
+        return footer
     }
     
     // MARK: UICollectionViewDelegate
