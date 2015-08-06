@@ -20,6 +20,7 @@
 		4B7AC97C1B441B3D00E19056 /* CHTCollectionViewWaterfallLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B7AC97B1B441B3D00E19056 /* CHTCollectionViewWaterfallLayout.swift */; };
 		4B7AC97E1B441DC700E19056 /* HistoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B7AC97D1B441DC700E19056 /* HistoryViewController.swift */; };
 		4B7AC9801B4423AD00E19056 /* BeautyCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B7AC97F1B4423AD00E19056 /* BeautyCollectionViewCell.swift */; };
+		4B8A88D71B73A386005470F0 /* AboutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B8A88D61B73A386005470F0 /* AboutViewController.swift */; };
 		4BD0DD3F1B42C84F00F08CF5 /* Kingfisher.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4BD0DD3D1B42C84F00F08CF5 /* Kingfisher.framework */; };
 		4BD0DD401B42C84F00F08CF5 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4BD0DD3E1B42C84F00F08CF5 /* Alamofire.framework */; };
 		4BD0DD431B42CBA400F08CF5 /* BeautyImageEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BD0DD421B42CBA400F08CF5 /* BeautyImageEntity.swift */; };
@@ -54,6 +55,7 @@
 		4B7AC97B1B441B3D00E19056 /* CHTCollectionViewWaterfallLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CHTCollectionViewWaterfallLayout.swift; sourceTree = "<group>"; };
 		4B7AC97D1B441DC700E19056 /* HistoryViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HistoryViewController.swift; sourceTree = "<group>"; };
 		4B7AC97F1B4423AD00E19056 /* BeautyCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BeautyCollectionViewCell.swift; sourceTree = "<group>"; };
+		4B8A88D61B73A386005470F0 /* AboutViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AboutViewController.swift; sourceTree = "<group>"; };
 		4BD0DD3D1B42C84F00F08CF5 /* Kingfisher.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Kingfisher.framework; path = Carthage/Build/iOS/Kingfisher.framework; sourceTree = "<group>"; };
 		4BD0DD3E1B42C84F00F08CF5 /* Alamofire.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Alamofire.framework; path = Carthage/Build/iOS/Alamofire.framework; sourceTree = "<group>"; };
 		4BD0DD421B42CBA400F08CF5 /* BeautyImageEntity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BeautyImageEntity.swift; sourceTree = "<group>"; };
@@ -126,6 +128,7 @@
 				4B7AC97F1B4423AD00E19056 /* BeautyCollectionViewCell.swift */,
 				4B4903B71B6FADFF004D5458 /* MoreViewController.swift */,
 				4BF4E6E51B72531100986D21 /* BeautyCollectionViewFooter.swift */,
+				4B8A88D61B73A386005470F0 /* AboutViewController.swift */,
 			);
 			path = beauties;
 			sourceTree = "<group>";
@@ -301,6 +304,7 @@
 			files = (
 				4B4903B81B6FADFF004D5458 /* MoreViewController.swift in Sources */,
 				4B7AC9801B4423AD00E19056 /* BeautyCollectionViewCell.swift in Sources */,
+				4B8A88D71B73A386005470F0 /* AboutViewController.swift in Sources */,
 				4BD0DD431B42CBA400F08CF5 /* BeautyImageEntity.swift in Sources */,
 				4B7AC97C1B441B3D00E19056 /* CHTCollectionViewWaterfallLayout.swift in Sources */,
 				4BF4E6E61B72531100986D21 /* BeautyCollectionViewFooter.swift in Sources */,

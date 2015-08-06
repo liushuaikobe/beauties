@@ -2,6 +2,7 @@
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="14E46" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="f3g-TE-CM5">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
         <!--history-->
@@ -65,7 +66,7 @@
         <!--更多-->
         <scene sceneID="tkG-C3-IY6">
             <objects>
-                <tableViewController title="Beauties" id="cB3-XF-lPP" userLabel="更多" customClass="MoreViewController" customModule="beauties" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController title="更多" id="cB3-XF-lPP" userLabel="更多" customClass="MoreViewController" customModule="beauties" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" separatorStyle="default" rowHeight="60" sectionHeaderHeight="22" sectionFooterHeight="22" id="0kq-6A-vVV">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -112,16 +113,16 @@
                             <outlet property="delegate" destination="cB3-XF-lPP" id="LqC-Iz-eYc"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Beauties" id="zxj-2Z-pAB" userLabel="Beauties"/>
+                    <navigationItem key="navigationItem" title="更多" id="zxj-2Z-pAB" userLabel="Beauties"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="eyf-31-Jbi" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="561" y="-780"/>
         </scene>
-        <!--View Controller-->
+        <!--关于-->
         <scene sceneID="JCH-W7-JL4">
             <objects>
-                <viewController id="UUY-7P-pQR" sceneMemberID="viewController">
+                <viewController title="关于" id="UUY-7P-pQR" customClass="AboutViewController" customModule="beauties" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="xSj-2v-BTi"/>
                         <viewControllerLayoutGuide type="bottom" id="MV8-WU-oOQ"/>
@@ -129,12 +130,48 @@
                     <view key="view" contentMode="scaleToFill" id="Cc0-Fd-P2Q">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="http://gank.io" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TNv-ke-QKS">
+                                <rect key="frame" x="248" y="290" width="103" height="20.5"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="created by @liushuaikobe" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="alL-Kv-twl">
+                                <rect key="frame" x="202" y="500" width="196" height="20.5"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="logo.png" translatesAutoresizingMaskIntoConstraints="NO" id="fcH-Nq-hGh">
+                                <rect key="frame" x="210" y="50" width="180" height="165"/>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="数据来源 &amp; Thanks to" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MYx-zE-nds">
+                                <rect key="frame" x="218" y="249" width="164" height="20.5"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="centerX" secondItem="alL-Kv-twl" secondAttribute="centerX" id="7II-2C-m9E"/>
+                            <constraint firstAttribute="centerX" secondItem="MYx-zE-nds" secondAttribute="centerX" id="Bgj-iE-9R6"/>
+                            <constraint firstAttribute="centerY" secondItem="TNv-ke-QKS" secondAttribute="centerY" id="LnR-lY-41D"/>
+                            <constraint firstItem="fcH-Nq-hGh" firstAttribute="top" secondItem="Cc0-Fd-P2Q" secondAttribute="topMargin" constant="50" id="Nzt-av-Zmx"/>
+                            <constraint firstItem="MV8-WU-oOQ" firstAttribute="top" secondItem="alL-Kv-twl" secondAttribute="bottom" constant="30" id="PP1-sQ-g7V"/>
+                            <constraint firstAttribute="centerX" secondItem="fcH-Nq-hGh" secondAttribute="centerX" id="QFR-zc-KTO"/>
+                            <constraint firstAttribute="centerX" secondItem="TNv-ke-QKS" secondAttribute="centerX" id="eY2-JZ-7uV"/>
+                            <constraint firstItem="TNv-ke-QKS" firstAttribute="top" secondItem="MYx-zE-nds" secondAttribute="bottom" constant="20" id="wtg-Dh-eUP"/>
+                        </constraints>
                     </view>
+                    <connections>
+                        <outlet property="linkLabel" destination="TNv-ke-QKS" id="7k6-Lj-R2q"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="AAO-Ug-dnO" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1375" y="-808"/>
+            <point key="canvasLocation" x="1390" y="-758"/>
         </scene>
         <!--更多-->
         <scene sceneID="muH-06-aGi">
@@ -154,4 +191,7 @@
             <point key="canvasLocation" x="-443" y="-662"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="logo.png" width="180" height="165"/>
+    </resources>
 </document>
