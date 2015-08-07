@@ -8,7 +8,6 @@
 
 import Foundation
 import UIKit
-import Alamofire
 import Kingfisher
 
 class TodayViewController: UIViewController {

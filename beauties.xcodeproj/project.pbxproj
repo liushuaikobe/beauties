@@ -22,8 +22,9 @@
 		4B7AC9801B4423AD00E19056 /* BeautyCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B7AC97F1B4423AD00E19056 /* BeautyCollectionViewCell.swift */; };
 		4B8A88D71B73A386005470F0 /* AboutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B8A88D61B73A386005470F0 /* AboutViewController.swift */; };
 		4BD0DD3F1B42C84F00F08CF5 /* Kingfisher.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4BD0DD3D1B42C84F00F08CF5 /* Kingfisher.framework */; };
-		4BD0DD401B42C84F00F08CF5 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4BD0DD3E1B42C84F00F08CF5 /* Alamofire.framework */; };
 		4BD0DD431B42CBA400F08CF5 /* BeautyImageEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BD0DD421B42CBA400F08CF5 /* BeautyImageEntity.swift */; };
+		4BE566D21B74F1FE0079197A /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4BE566D01B74F1FE0079197A /* Fabric.framework */; };
+		4BE566D31B74F1FE0079197A /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4BE566D11B74F1FE0079197A /* Crashlytics.framework */; };
 		4BF4E6E61B72531100986D21 /* BeautyCollectionViewFooter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BF4E6E51B72531100986D21 /* BeautyCollectionViewFooter.swift */; };
 /* End PBXBuildFile section */
 
@@ -57,8 +58,9 @@
 		4B7AC97F1B4423AD00E19056 /* BeautyCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BeautyCollectionViewCell.swift; sourceTree = "<group>"; };
 		4B8A88D61B73A386005470F0 /* AboutViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AboutViewController.swift; sourceTree = "<group>"; };
 		4BD0DD3D1B42C84F00F08CF5 /* Kingfisher.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Kingfisher.framework; path = Carthage/Build/iOS/Kingfisher.framework; sourceTree = "<group>"; };
-		4BD0DD3E1B42C84F00F08CF5 /* Alamofire.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Alamofire.framework; path = Carthage/Build/iOS/Alamofire.framework; sourceTree = "<group>"; };
 		4BD0DD421B42CBA400F08CF5 /* BeautyImageEntity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BeautyImageEntity.swift; sourceTree = "<group>"; };
+		4BE566D01B74F1FE0079197A /* Fabric.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Fabric.framework; sourceTree = SOURCE_ROOT; };
+		4BE566D11B74F1FE0079197A /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = SOURCE_ROOT; };
 		4BF4E6E51B72531100986D21 /* BeautyCollectionViewFooter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BeautyCollectionViewFooter.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -68,7 +70,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				4BD0DD3F1B42C84F00F08CF5 /* Kingfisher.framework in Frameworks */,
-				4BD0DD401B42C84F00F08CF5 /* Alamofire.framework in Frameworks */,
+				4BE566D31B74F1FE0079197A /* Crashlytics.framework in Frameworks */,
+				4BE566D21B74F1FE0079197A /* Fabric.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -95,7 +98,6 @@
 			isa = PBXGroup;
 			children = (
 				4BD0DD3D1B42C84F00F08CF5 /* Kingfisher.framework */,
-				4BD0DD3E1B42C84F00F08CF5 /* Alamofire.framework */,
 				4B13663E1B3EF8A100986654 /* beauties */,
 				4B1366541B3EF8A100986654 /* beautiesTests */,
 				4B13663D1B3EF8A100986654 /* Products */,
@@ -114,6 +116,8 @@
 		4B13663E1B3EF8A100986654 /* beauties */ = {
 			isa = PBXGroup;
 			children = (
+				4BE566D01B74F1FE0079197A /* Fabric.framework */,
+				4BE566D11B74F1FE0079197A /* Crashlytics.framework */,
 				4B4903B91B6FB1F4004D5458 /* images */,
 				4B7AC97A1B441B1700E19056 /* CHTCollectionViewWaterfallLayout */,
 				4BD0DD411B42CB8400F08CF5 /* Entiy */,
@@ -193,6 +197,7 @@
 				4B1366391B3EF8A100986654 /* Frameworks */,
 				4B13663A1B3EF8A100986654 /* Resources */,
 				4BD0DD3C1B42C7FC00F08CF5 /* ShellScript */,
+				4BE566CF1B74F1B10079197A /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -286,7 +291,6 @@
 			files = (
 			);
 			inputPaths = (
-				"$(SRCROOT)/Carthage/Build/iOS/Alamofire.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/Kingfisher.framework",
 			);
 			outputPaths = (
@@ -294,6 +298,19 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "/usr/local/bin/carthage copy-frameworks";
+		};
+		4BE566CF1B74F1B10079197A /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "./Fabric.framework/run 5b6d196a58f4acbc481f40758c365e9b14ae8732 3490fc62e207b8c7ec5ae2d4a8578db972041bdd761c9d59f51f7b5ca63b611f";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -442,6 +459,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
+					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = beauties/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -456,6 +474,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
+					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = beauties/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
