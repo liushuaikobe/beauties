@@ -50,6 +50,9 @@ class TodayViewController: UIViewController {
             var swipeGesture = UISwipeGestureRecognizer(target: self, action: "onSwipe:")
             swipeGesture.direction = UISwipeGestureRecognizerDirection.Down
             beautyImageView.addGestureRecognizer(swipeGesture)
+            
+            var tapGesture = UITapGestureRecognizer(target: self, action: "onSwipe:")
+            beautyImageView.addGestureRecognizer(tapGesture)
         }
         
         var longPressGenture = UILongPressGestureRecognizer(target: self, action: "onLongPress:")
@@ -114,7 +117,7 @@ class TodayViewController: UIViewController {
             
             self.beautyImageView.frame = CGRect(origin: CGPointZero, size: CGSize(width: preferWidth, height: preferHeight))
         }
-        self.beautyImageView.center = CGPointMake(CGRectGetMidX(self.view.bounds), CGRectGetMidY(self.view.bounds) - 50)
+        self.beautyImageView.center = CGPointMake(CGRectGetMidX(self.view.bounds), CGRectGetMidY(self.view.bounds) - 30)
     }
 
     func onSwipe(sender: UISwipeGestureRecognizer) {
