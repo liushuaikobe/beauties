@@ -1,6 +1,4 @@
-# Beauty
-
-![logo](./beauties/logo.png)
+# ![logo](./beauties/logo.png)
 
 It's a project made while I'm learning Swift. The data is fetched from [http://gank.io/](http://gank.io/) by [@daimajia](https://github.com/daimajia).
 
