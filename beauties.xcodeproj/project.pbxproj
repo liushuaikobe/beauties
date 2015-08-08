@@ -21,6 +21,9 @@
 		4B7AC97E1B441DC700E19056 /* HistoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B7AC97D1B441DC700E19056 /* HistoryViewController.swift */; };
 		4B7AC9801B4423AD00E19056 /* BeautyCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B7AC97F1B4423AD00E19056 /* BeautyCollectionViewCell.swift */; };
 		4B8A88D71B73A386005470F0 /* AboutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B8A88D61B73A386005470F0 /* AboutViewController.swift */; };
+		4BC431171B76446E00FB6895 /* today@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4BC431141B76446E00FB6895 /* today@2x.png */; };
+		4BC431181B76446E00FB6895 /* history@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4BC431151B76446E00FB6895 /* history@2x.png */; };
+		4BC431191B76446E00FB6895 /* setting@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4BC431161B76446E00FB6895 /* setting@2x.png */; };
 		4BD0DD3F1B42C84F00F08CF5 /* Kingfisher.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4BD0DD3D1B42C84F00F08CF5 /* Kingfisher.framework */; };
 		4BD0DD431B42CBA400F08CF5 /* BeautyImageEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BD0DD421B42CBA400F08CF5 /* BeautyImageEntity.swift */; };
 		4BE566D21B74F1FE0079197A /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4BE566D01B74F1FE0079197A /* Fabric.framework */; };
@@ -57,6 +60,9 @@
 		4B7AC97D1B441DC700E19056 /* HistoryViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HistoryViewController.swift; sourceTree = "<group>"; };
 		4B7AC97F1B4423AD00E19056 /* BeautyCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BeautyCollectionViewCell.swift; sourceTree = "<group>"; };
 		4B8A88D61B73A386005470F0 /* AboutViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AboutViewController.swift; sourceTree = "<group>"; };
+		4BC431141B76446E00FB6895 /* today@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "today@2x.png"; sourceTree = "<group>"; };
+		4BC431151B76446E00FB6895 /* history@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "history@2x.png"; sourceTree = "<group>"; };
+		4BC431161B76446E00FB6895 /* setting@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "setting@2x.png"; sourceTree = "<group>"; };
 		4BD0DD3D1B42C84F00F08CF5 /* Kingfisher.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Kingfisher.framework; path = Carthage/Build/iOS/Kingfisher.framework; sourceTree = "<group>"; };
 		4BD0DD421B42CBA400F08CF5 /* BeautyImageEntity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BeautyImageEntity.swift; sourceTree = "<group>"; };
 		4BE566D01B74F1FE0079197A /* Fabric.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Fabric.framework; sourceTree = SOURCE_ROOT; };
@@ -165,6 +171,9 @@
 		4B4903B91B6FB1F4004D5458 /* images */ = {
 			isa = PBXGroup;
 			children = (
+				4BC431141B76446E00FB6895 /* today@2x.png */,
+				4BC431151B76446E00FB6895 /* history@2x.png */,
+				4BC431161B76446E00FB6895 /* setting@2x.png */,
 				4B4903BA1B6FB23A004D5458 /* logo.png */,
 			);
 			name = images;
@@ -268,8 +277,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4BC431171B76446E00FB6895 /* today@2x.png in Resources */,
 				4B4903BB1B6FB23A004D5458 /* logo.png in Resources */,
+				4BC431191B76446E00FB6895 /* setting@2x.png in Resources */,
 				4B1366471B3EF8A100986654 /* Main.storyboard in Resources */,
+				4BC431181B76446E00FB6895 /* history@2x.png in Resources */,
 				4B13664C1B3EF8A100986654 /* LaunchScreen.xib in Resources */,
 				4B1366491B3EF8A100986654 /* Images.xcassets in Resources */,
 			);
