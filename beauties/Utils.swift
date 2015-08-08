@@ -7,6 +7,9 @@
 //
 
 import Foundation
+import UIKit
+
+let ThemeColor = UIColor(red: 222.0 / 255.0, green: 110.0 / 255.0, blue: 75.0 / 255.0, alpha: 1)
 
 class BeautyDateUtil {
     

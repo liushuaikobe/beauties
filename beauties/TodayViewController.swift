@@ -30,7 +30,7 @@ class TodayViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.view.backgroundColor = UIColor(red: CGFloat(163 / 255.0), green: CGFloat(191 / 255.0), blue: CGFloat(168 / 255.0), alpha: 1)
+        self.view.backgroundColor = ThemeColor
         
         loadingIndicator = UIActivityIndicatorView(activityIndicatorStyle: .Gray)
         loadingIndicator.hidesWhenStopped = true
