@@ -20,6 +20,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Override point for customization after application launch.
         Fabric.with([Crashlytics()])
         UITabBar.appearance().tintColor = ThemeColor
+        UINavigationBar.appearance().tintColor = ThemeColor
+        UITableViewCell.appearance().tintColor = ThemeColor
         return true
     }
 
