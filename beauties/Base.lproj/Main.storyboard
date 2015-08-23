@@ -8,7 +8,7 @@
         <!--history-->
         <scene sceneID="Guh-Yq-BQM">
             <objects>
-                <viewController id="CE2-oN-1xj" userLabel="history" customClass="HistoryViewController" customModule="beauties" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="CE2-oN-1xj" userLabel="history" customClass="HistoryViewController" customModule="beauty" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="iac-hu-QWX"/>
                         <viewControllerLayoutGuide type="bottom" id="t4e-U6-Oqc"/>
@@ -27,7 +27,7 @@
         <!--today-->
         <scene sceneID="KQF-6M-nYb">
             <objects>
-                <viewController id="6RE-QU-fnl" userLabel="today" customClass="TodayViewController" customModule="beauties" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="6RE-QU-fnl" userLabel="today" customClass="TodayViewController" customModule="beauty" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="NSn-vb-60y"/>
                         <viewControllerLayoutGuide type="bottom" id="LyU-qX-8m3"/>
@@ -66,7 +66,7 @@
         <!--更多-->
         <scene sceneID="tkG-C3-IY6">
             <objects>
-                <tableViewController title="更多" id="cB3-XF-lPP" userLabel="更多" customClass="MoreViewController" customModule="beauties" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController title="更多" id="cB3-XF-lPP" userLabel="更多" customClass="MoreViewController" customModule="beauty" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" separatorStyle="default" rowHeight="60" sectionHeaderHeight="22" sectionFooterHeight="22" id="0kq-6A-vVV">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -114,6 +114,9 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="更多" id="zxj-2Z-pAB" userLabel="Beauties"/>
+                    <connections>
+                        <outlet property="appStoreCell" destination="nkX-lm-eY8" id="Yr6-88-Phn"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="eyf-31-Jbi" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -122,7 +125,7 @@
         <!--关于-->
         <scene sceneID="JCH-W7-JL4">
             <objects>
-                <viewController title="关于" id="UUY-7P-pQR" customClass="AboutViewController" customModule="beauties" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController title="关于" id="UUY-7P-pQR" customClass="AboutViewController" customModule="beauty" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="xSj-2v-BTi"/>
                         <viewControllerLayoutGuide type="bottom" id="MV8-WU-oOQ"/>

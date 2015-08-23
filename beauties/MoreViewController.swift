@@ -13,6 +13,7 @@ class MoreViewController: UITableViewController {
     
     var logoImage: UIImageView!
     
+    @IBOutlet weak var appStoreCell: UITableViewCell!
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -31,5 +32,14 @@ class MoreViewController: UITableViewController {
         var frame = logoImage.frame
         frame.size = CGSizeMake(120, 110)
         logoImage.frame = frame
+    }
+    
+    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        if let clickedCell = tableView.cellForRowAtIndexPath(indexPath) {
+            if clickedCell == appStoreCell {
+                let appURL = NSURL(string: "itms-apps://itunes.apple.com/app/1033020551")!
+                UIApplication.sharedApplication().openURL(appURL)
+            }
+        }
     }
 }
