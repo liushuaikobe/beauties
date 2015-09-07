@@ -4,10 +4,6 @@ It's a project made while I'm learning Swift. The data is fetched from [http://g
 
 I get the image by parsing the HTML, but you can use its [API](http://gank.io/api) now.
 
-### Demo
-
-![demo](./demos/demo.png)
-
 ### Keywords
 
 * [Carthage](https://github.com/Carthage/Carthage)
