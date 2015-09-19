@@ -60,12 +60,12 @@ class NetworkUtil {
         
         let url = NSURL(string: API + date)!
         var request = NSURLRequest(URL: url)
-        var response: AutoreleasingUnsafeMutablePointer<NSURLResponse? >= nil
-        var error: NSErrorPointer = nil
-        var data = NSURLConnection.sendSynchronousRequest(request, returningResponse: response, error: error)
+        var response: NSURLResponse?
+        var error: NSError?
+        var data = NSURLConnection.sendSynchronousRequest(request, returningResponse: &response, error: &error)
         
-        if error != nil && error.memory != nil {
-            println("ERROR: \(error.memory)")
+        if error != nil {
+            println("ERROR: \(error!.localizedDescription)")
             return nil
         }
         
