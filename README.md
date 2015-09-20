@@ -6,7 +6,7 @@ I get the image by parsing the HTML, but you can use its [API](http://gank.io/ap
 
 ### Demo
 
-![demo](./demo/demo.png)
+![demo](./demos/demo.png)
 
 ### Keywords
 
