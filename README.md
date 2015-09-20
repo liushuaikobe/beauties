@@ -11,10 +11,10 @@ I get the image by parsing the HTML, but you can use its [API](http://gank.io/ap
 ### Keywords
 
 * [Carthage](https://github.com/Carthage/Carthage)
+* [Alamofire](https://github.com/Alamofire/Alamofire)
 * [Kingfisher](https://github.com/onevcat/Kingfisher)
 * [CHTCollectionViewWaterfallLayout](https://github.com/chiahsien/CHTCollectionViewWaterfallLayout)
 * `UIBlurEffect`
-* `NSURLConnection`
 * Sketch
 
 ### License
