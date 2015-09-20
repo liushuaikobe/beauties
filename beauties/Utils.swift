@@ -44,53 +44,36 @@ class BeautyDateUtil {
 class NetworkUtil {
     static let API_DATA_URL = "http://gank.avosapps.com/api/data/%E7%A6%8F%E5%88%A9/"
     static let API_DAY_URL  = "http://gank.avosapps.com/api/day/"
+    static let API_RANDOM_URL = "http://gank.avosapps.com/api/random/data/%E7%A6%8F%E5%88%A9/"
     
     static let PAGE_SIZE = 20
     
     class func getBeauties(page: Int, complete: ([String], NSError?) -> Void) {
-        
+
         let url = "\(API_DATA_URL)\(PAGE_SIZE)/\(page)"
-        
+#if DEBUG
         println(url)
-        
+#endif
         Alamofire.request(.GET, url).responseJSON {
             _, _, json, error in
             
-            if error != nil {
-                println("ERROR: \(error?.localizedDescription)")
+            if NetworkUtil.error(error) {
                 complete([String](), error)
                 return
             }
             
-            if let j = json as? Dictionary<String, AnyObject> {
-                
-                if let results = j["results"] as? [Dictionary<String, AnyObject>] {
-                    
-                    var ret = [String]()
-                    
-                    for b in results {
-                        ret.append(b["url"] as! String)
-                    }
-                    
-                    complete(ret, nil)
-                    return
-                }
-                
-            }
-            
-            complete([String](), nil)
+            complete(NetworkUtil.parseBeautyList(json), nil)
         }
     }
     
     class func getTodayBeauty(complete: [String] -> Void) {
-        
+#if DEBUG
         println(API_DAY_URL + BeautyDateUtil.todayString())
-        
+#endif
         Alamofire.request(.GET, API_DAY_URL + BeautyDateUtil.todayString()).responseJSON {
             _, _, json, error in
             
-            if error != nil {
-                println("ERROR: \(error?.localizedDescription)")
+            if NetworkUtil.error(error) {
                 complete([String]())
                 return
             }
@@ -105,7 +88,7 @@ class NetworkUtil {
                             
                             if let fulis = results["福利"] as? [Dictionary<String, AnyObject>] {
                                 
-                                var ret = Array<String>()
+                                var ret = [String]()
                                 
                                 for fuli in fulis {
                                     ret.append(fuli["url"] as! String)
@@ -118,7 +101,46 @@ class NetworkUtil {
                     }
                 }
             }
-            complete([String]())
+            // No Beauty today, get a random beauty
+            NetworkUtil.getRandomBeauty(1, complete: complete)
         }
+    }
+    
+    class func getRandomBeauty(count: Int, complete: [String] -> Void) {
+        
+        let url = "\(API_RANDOM_URL)\(count)"
+#if DEBUG
+        println("Random URL --> \(url)")
+#endif
+        Alamofire.request(.GET, url).responseJSON {
+            _, _, json, error in
+            
+            if NetworkUtil.error(error) {
+                complete([String]())
+                return
+            }
+            
+            complete(NetworkUtil.parseBeautyList(json))
+        }
+    }
+    
+    class func parseBeautyList(json: AnyObject?) -> [String] {
+        var ret = [String]()
+        if let j = json as? Dictionary<String, AnyObject> {
+            if let results = j["results"] as? [Dictionary<String, AnyObject>] {
+                for b in results {
+                    ret.append(b["url"] as! String)
+                }
+            }
+        }
+        return ret
+    }
+    
+    class func error(error: NSError?) -> Bool {
+        if error != nil {
+            println("ERROR: \(error?.localizedDescription)")
+            return true
+        }
+        return false
     }
 }
