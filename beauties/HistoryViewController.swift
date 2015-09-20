@@ -19,6 +19,7 @@ class HistoryViewController: UIViewController, CHTCollectionViewDelegateWaterfal
     var beauties: [BeautyImageEntity]
     let sharedMargin = 10
     var page = 1
+    var requestLocker = 0
     var isLoadingNow = false
     
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?) {
@@ -74,36 +75,35 @@ class HistoryViewController: UIViewController, CHTCollectionViewDelegateWaterfal
         self.fetchNextPage(page)
     }
     
-    func fetchData(args: (dispatch_queue_t, String)) {
-        dispatch_async(args.0) {
-            var beauty = NetworkUtil.getImageByDateSync(args.1)
-            if beauty != nil {
-                self.beauties.append(beauty!)
+    func fetchData(date: String) {
+        NetworkUtil.getImageByDate(date) {
+            [weak self]result in
+            
+            if let sself = self {
+                
+                if let entity = result {
+                    if let sself = self {
+                        sself.beauties.append(entity)
+                    }
+                }
+                
+                sself.requestLocker += 1
+                if sself.requestLocker >= BeautyDateUtil.PAGE_SIZE {
+                    sself.requestLocker = 0
+                    sself.fetchDataFinished()
+                }
             }
         }
     }
     
-    func fetchNextPage(page: Int) {
-        if (self.page > BeautyDateUtil.MAX_PAGE) {
-            collectionViewLayout.footerHeight = 0
-            return
-        }
-        if (self.isLoadingNow) {
-            return
-        }
-        self.isLoadingNow = true
-        println("---------- Starting Page \(page) ----------")
-        let historyDates = BeautyDateUtil.generateHistoryDateString(page)
-        var queue: dispatch_queue_t = dispatch_queue_create("Beauty", DISPATCH_QUEUE_CONCURRENT)
-        historyDates.map({return (queue, $0)}).map(fetchData)
-        
-        dispatch_barrier_async(queue) {
-            println("---------- Finished Page \(page) ----------")
+    func fetchDataFinished() {
+        println("---------- Finished Page \(page) ----------")
+        dispatch_async(dispatch_get_main_queue()) {
             // ----- increment page by 1
             self.page += 1
             // ----- set background blur image
             if count(self.beauties) > 0 {
-            
+                
                 var beautyEntity = self.beauties[0]
                 
                 var bgi = UIImageView(frame: self.view.bounds)
@@ -122,6 +122,21 @@ class HistoryViewController: UIViewController, CHTCollectionViewDelegateWaterfal
             
             self.isLoadingNow = false
         }
+    }
+    
+    func fetchNextPage(page: Int) {
+        if (self.page > BeautyDateUtil.MAX_PAGE) {
+            collectionViewLayout.footerHeight = 0
+            return
+        }
+        if (self.isLoadingNow) {
+            return
+        }
+        self.isLoadingNow = true
+        println("---------- Starting Page \(page) ----------")
+        let historyDates = BeautyDateUtil.generateHistoryDateString(page)
+        var queue: dispatch_queue_t = dispatch_queue_create("Beauty", DISPATCH_QUEUE_CONCURRENT)
+        historyDates.map(self.fetchData)
     }
     
     // MARK: UIScrollViewDelegate

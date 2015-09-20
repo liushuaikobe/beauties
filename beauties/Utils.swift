@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+import Alamofire
 
 let ThemeColor = UIColor(red: 222.0 / 255.0, green: 110.0 / 255.0, blue: 75.0 / 255.0, alpha: 1)
 
@@ -51,41 +52,32 @@ class NetworkUtil {
     static let widthPatterString = "width\\s*:\\s*(\\d+)px"
     static let widthRegex = NSRegularExpression(pattern: widthPatterString, options: .CaseInsensitive, error: nil)!
     
-    class func getImageByDateSync(date: String) -> BeautyImageEntity? {
-        
-        if let entity = DataUtil.findBeautyForDate(date) {
-            println("Hit Cache for date: \(date)!")
-            return entity
-        }
-        
-        let url = NSURL(string: API + date)!
-        var request = NSURLRequest(URL: url)
-        var response: NSURLResponse?
-        var error: NSError?
-        var data = NSURLConnection.sendSynchronousRequest(request, returningResponse: &response, error: &error)
-        
-        if error != nil {
-            println("ERROR: \(error!.localizedDescription)")
-            return nil
-        }
-        
-        if let htmlContentData = data {
-            let htmlContent = NSString(data: htmlContentData, encoding: NSUTF8StringEncoding) as! String
-            var entity = self.getImageEntityFromHTML(htmlContent)
-            if entity != nil {
-                DataUtil.saveBeauty(entity!, forDate: date)
-            }
-            return entity
-        } else {
-            return nil
-        }
-    }
-    
     class func getImageByDate(date: String, complete: (BeautyImageEntity?) -> Void) -> Void {
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
-            var entity = self.getImageByDateSync(date)
-            dispatch_async(dispatch_get_main_queue()) {
-                complete(entity)
+        // find from local cache first
+        if let entity = DataUtil.findBeautyForDate(date) {
+            complete(entity)
+            return
+        }
+        // fetching by a request
+        Alamofire.request(.GET, API + date).responseString(encoding: NSUTF8StringEncoding) {
+            (_, _, resultStr, error) -> Void in
+            
+            if (error != nil) {
+                println("ERROR: \(error!.localizedDescription)")
+                complete(nil)
+                return
+            }
+            
+            if let htmlContent = resultStr {
+//                println(htmlContent)
+                if let entity = self.getImageEntityFromHTML(htmlContent) {
+                    DataUtil.saveBeauty(entity, forDate: date)
+                    complete(entity)
+                } else {
+                    complete(nil)
+                }
+            } else {
+                complete(nil)
             }
         }
     }

@@ -1,1 +1,2 @@
-github "onevcat/Kingfisher" >= 1.4
+github "onevcat/Kingfisher" == 1.4.5
+github "Alamofire/Alamofire" == 1.3.1 
