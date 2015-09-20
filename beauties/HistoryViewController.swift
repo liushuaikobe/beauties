@@ -19,7 +19,6 @@ class HistoryViewController: UIViewController, CHTCollectionViewDelegateWaterfal
     var beauties: [BeautyImageEntity]
     let sharedMargin = 10
     var page = 1
-    var requestLocker = 0
     var isLoadingNow = false
     
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?) {
@@ -75,55 +74,6 @@ class HistoryViewController: UIViewController, CHTCollectionViewDelegateWaterfal
         self.fetchNextPage(page)
     }
     
-    func fetchData(date: String) {
-        NetworkUtil.getImageByDate(date) {
-            [weak self]result in
-            
-            if let sself = self {
-                
-                if let entity = result {
-                    if let sself = self {
-                        sself.beauties.append(entity)
-                    }
-                }
-                
-                sself.requestLocker += 1
-                if sself.requestLocker >= BeautyDateUtil.PAGE_SIZE {
-                    sself.requestLocker = 0
-                    sself.fetchDataFinished()
-                }
-            }
-        }
-    }
-    
-    func fetchDataFinished() {
-        println("---------- Finished Page \(page) ----------")
-        dispatch_async(dispatch_get_main_queue()) {
-            // ----- increment page by 1
-            self.page += 1
-            // ----- set background blur image
-            if count(self.beauties) > 0 {
-                
-                var beautyEntity = self.beauties[0]
-                
-                var bgi = UIImageView(frame: self.view.bounds)
-                bgi.contentMode = .ScaleToFill
-                self.view.addSubview(bgi)
-                self.view.sendSubviewToBack(bgi)
-                
-                bgi.kf_setImageWithURL(NSURL(string: beautyEntity.imageUrl!)!, placeholderImage: nil, optionsInfo: nil, completionHandler: { (image, error, cacheType, imageURL) -> () in
-                    bgi.applyBlurEffect()
-                })
-            }
-            
-            // ----- reload data
-            self.refreshControl.endRefreshing()
-            self.beautyCollectionView.reloadData()
-            
-            self.isLoadingNow = false
-        }
-    }
-    
     func fetchNextPage(page: Int) {
         if (self.page > BeautyDateUtil.MAX_PAGE) {
             collectionViewLayout.footerHeight = 0
@@ -132,11 +82,51 @@ class HistoryViewController: UIViewController, CHTCollectionViewDelegateWaterfal
         if (self.isLoadingNow) {
             return
         }
+        
         self.isLoadingNow = true
         println("---------- Starting Page \(page) ----------")
-        let historyDates = BeautyDateUtil.generateHistoryDateString(page)
-        var queue: dispatch_queue_t = dispatch_queue_create("Beauty", DISPATCH_QUEUE_CONCURRENT)
-        historyDates.map(self.fetchData)
+        
+        NetworkUtil.getBeauties(page) {
+            [weak self] result, error in
+            println("---------- Finished Page \(page) ----------")
+            
+            if let sself = self {
+                
+                sself.isLoadingNow = false
+                sself.refreshControl.endRefreshing()
+                
+                if error == nil {
+                    sself.page += 1
+                    sself.beauties += result.map(sself.buildEntityWithURLString)
+                    sself.setBGI()
+                    sself.beautyCollectionView.reloadData()
+                }
+            }
+        }
+    }
+    
+    // set Blur Background Image
+    func setBGI() {
+        if count(self.beauties) == 0 {
+            return
+        }
+        var beautyEntity = self.beauties[0]
+        
+        var bgi = UIImageView(frame: self.view.bounds)
+        bgi.contentMode = .ScaleToFill
+        self.view.addSubview(bgi)
+        self.view.sendSubviewToBack(bgi)
+        
+        bgi.kf_setImageWithURL(NSURL(string: beautyEntity.imageUrl!)!, placeholderImage: nil, optionsInfo: nil) {
+            image, error, cacheType, imageURL in
+            bgi.applyBlurEffect()
+        }
+    }
+    
+    func buildEntityWithURLString(url: String) -> BeautyImageEntity {
+        var b = BeautyImageEntity()
+        b.imageUrl = url
+        return b
     }
     
     // MARK: UIScrollViewDelegate
@@ -186,13 +176,6 @@ class HistoryViewController: UIViewController, CHTCollectionViewDelegateWaterfal
     func collectionView (collectionView: UICollectionView,layout collectionViewLayout: UICollectionViewLayout,
         sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
         var entity = beauties[indexPath.row]
-        let width: Float = (Float(collectionView.bounds.size.width) - Float(sharedMargin) * 3) / 2
-        
-        var height:Float = 200.0
-        if entity.imageHeight != nil && entity.imageWidth != nil {
-            height = (Float(entity.imageHeight!) * width) / Float(entity.imageWidth!)
-        }
-            
-        return CGSize(width: CGFloat(width), height: CGFloat(height))
+        return CGSize(width: CGFloat(100), height: CGFloat(100))
     }
 }

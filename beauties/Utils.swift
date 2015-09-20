@@ -42,101 +42,85 @@ class BeautyDateUtil {
 }
 
 class NetworkUtil {
-    static let API = "http://gank.io/"
+    static let API_DATA_URL = "http://gank.avosapps.com/api/data/%E7%A6%8F%E5%88%A9/"
+    static let API_DAY_URL  = "http://gank.avosapps.com/api/day/"
     
-    static let patternString = "<img\\s+alt=\".*\"\\s+src=\"(.+)\"\\s+style=\"(.*)\"\\s*/>"
-    static let regex = NSRegularExpression(pattern: patternString, options: .CaseInsensitive, error: nil)!
+    static let PAGE_SIZE = 20
     
-    static let heightPatternString = "height\\s*:\\s*(\\d+)px"
-    static let heightRegex = NSRegularExpression(pattern: heightPatternString, options: .CaseInsensitive, error: nil)!
-    static let widthPatterString = "width\\s*:\\s*(\\d+)px"
-    static let widthRegex = NSRegularExpression(pattern: widthPatterString, options: .CaseInsensitive, error: nil)!
-    
-    class func getImageByDate(date: String, complete: (BeautyImageEntity?) -> Void) -> Void {
-        // find from local cache first
-        if let entity = DataUtil.findBeautyForDate(date) {
-            complete(entity)
-            return
-        }
-        // fetching by a request
-        Alamofire.request(.GET, API + date).responseString(encoding: NSUTF8StringEncoding) {
-            (_, _, resultStr, error) -> Void in
+    class func getBeauties(page: Int, complete: ([String], NSError?) -> Void) {
+        
+        let url = "\(API_DATA_URL)\(PAGE_SIZE)/\(page)"
+        
+        println(url)
+        
+        Alamofire.request(.GET, url).responseJSON {
+            _, _, json, error in
             
-            if (error != nil) {
-                println("ERROR: \(error!.localizedDescription)")
-                complete(nil)
+            if error != nil {
+                println("ERROR: \(error?.localizedDescription)")
+                complete([String](), error)
                 return
             }
             
-            if let htmlContent = resultStr {
-//                println(htmlContent)
-                if let entity = self.getImageEntityFromHTML(htmlContent) {
-                    DataUtil.saveBeauty(entity, forDate: date)
-                    complete(entity)
-                } else {
-                    complete(nil)
+            if let j = json as? Dictionary<String, AnyObject> {
+                
+                if let results = j["results"] as? [Dictionary<String, AnyObject>] {
+                    
+                    var ret = [String]()
+                    
+                    for b in results {
+                        ret.append(b["url"] as! String)
+                    }
+                    
+                    complete(ret, nil)
+                    return
                 }
-            } else {
-                complete(nil)
+                
             }
+            
+            complete([String](), nil)
         }
     }
     
-    class func getImageEntityFromHTML(htmlContent: String) -> BeautyImageEntity? {
-        var beautyImageEntity = BeautyImageEntity()
+    class func getTodayBeauty(complete: [String] -> Void) {
         
-        let matches = self.regex.matchesInString(htmlContent, options: nil, range: NSMakeRange(0, count(htmlContent)))
+        println(API_DAY_URL + BeautyDateUtil.todayString())
         
-        if count(matches) == 0 {
-            return nil
-        }
-        
-        let match = (matches as! [NSTextCheckingResult])[0]
-        
-        // ------------- get image url
-        let beautyUrl = (htmlContent as NSString).substringWithRange(match.rangeAtIndex(1))
-        beautyImageEntity.imageUrl = beautyUrl
-        
-        // ------------- get width and height
-        let style = (htmlContent as NSString).substringWithRange(match.rangeAtIndex(2))
-        
-        let heightMatches = self.heightRegex.matchesInString(style, options: nil, range: NSMakeRange(0, count(style)))
-        let widthMatches = self.widthRegex.matchesInString(style, options: nil, range: NSMakeRange(0, count(style)))
-        
-        if count(heightMatches) > 0 {
-            let heightMatch = (heightMatches as! [NSTextCheckingResult])[0]
-            beautyImageEntity.imageHeight = (style as NSString).substringWithRange(heightMatch.rangeAtIndex(1)).toInt()
-        }
-        if count(widthMatches) > 0 {
-            let widthMatch = (widthMatches as! [NSTextCheckingResult])[0]
-            beautyImageEntity.imageWidth = (style as NSString).substringWithRange(widthMatch.rangeAtIndex(1)).toInt()
-        }
-        
-        return beautyImageEntity
-    }
-    
-    class func getTodayImage(complete: (BeautyImageEntity?) -> Void) -> Void {
-        let todayDateStr = BeautyDateUtil.todayString()
-        self.getImageByDate(todayDateStr) {
-            entity in
-            if entity == nil {
-                if let cachedEntity = DataUtil.getLatestEntity() {
-                    complete(cachedEntity)
-                } else {
-                    // default image
-                    println("No beauty online, no cache neither. Return default beauty")
-                    let defaultEntity = BeautyImageEntity()
-                    defaultEntity.imageUrl = "http://ww4.sinaimg.cn/large/7a8aed7bgw1etv4ehu391j20f00migoi.jpg"
-                    defaultEntity.imageHeight = 825
-                    defaultEntity.imageWidth = 550
-                    complete(defaultEntity)
+        Alamofire.request(.GET, API_DAY_URL + BeautyDateUtil.todayString()).responseJSON {
+            _, _, json, error in
+            
+            if error != nil {
+                println("ERROR: \(error?.localizedDescription)")
+                complete([String]())
+                return
+            }
+            
+            if let j = json as? Dictionary<String, AnyObject> {
+                
+                if let category = j["category"] as? [String] {
+                    
+                    if contains(category, "福利") {
+                        
+                        if let results = j["results"] as? Dictionary<String, AnyObject> {
+                            
+                            if let fulis = results["福利"] as? [Dictionary<String, AnyObject>] {
+                                
+                                var ret = Array<String>()
+                                
+                                for fuli in fulis {
+                                    ret.append(fuli["url"] as! String)
+                                }
+                                
+                                complete(ret)
+                                return
+                            }
+                        }
+                    }
                 }
-            } else {
-                complete(entity)
             }
+            complete([String]())
         }
     }
-    
 }
 
 class DataUtil {

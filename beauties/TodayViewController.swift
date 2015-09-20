@@ -31,19 +31,18 @@ class TodayViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = ThemeColor
+        self.edgesForExtendedLayout = .None
         
         loadingIndicator = UIActivityIndicatorView(activityIndicatorStyle: .Gray)
         loadingIndicator.hidesWhenStopped = true
         self.view.addSubview(loadingIndicator)
         loadingIndicator.startAnimating()
         
-        beautyImageView = UIImageView()
+        beautyImageView = UIImageView(frame: self.view.bounds)
+        beautyImageView.autoresizingMask = .FlexibleWidth | .FlexibleHeight
+        beautyImageView.contentMode = .ScaleAspectFit
         beautyImageView.userInteractionEnabled = true
-        beautyImageView.layer.borderColor = UIColor.whiteColor().CGColor
-        beautyImageView.layer.borderWidth = 10
-        beautyImageView.layer.shadowOpacity = 0.5
-        beautyImageView.layer.shadowColor = UIColor(red: 187 / 255.0, green: 187 / 255.0, blue: 187 / 255.0, alpha: 1).CGColor
-        beautyImageView.layer.shadowOffset = CGSizeMake(2, 6)
+        beautyImageView.backgroundColor = UIColor.clearColor()
         self.view.addSubview(beautyImageView)
         
         if canBeClosed {
@@ -83,17 +82,17 @@ class TodayViewController: UIViewController {
             return
         }
         
-        NetworkUtil.getTodayImage() {
-            beautyEntity in
-            self.todayBeauty = beautyEntity
-            if beautyEntity != nil {
-                setImage(beautyEntity!)
+        NetworkUtil.getTodayBeauty {
+            [weak self] urls in
+            
+            if let sself = self {
+                if count(urls) > 0 {
+                    sself.todayBeauty = BeautyImageEntity()
+                    sself.todayBeauty!.imageUrl = urls[0]
+                    setImage(sself.todayBeauty!)
+                }
             }
         }
-    }
-    
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
     }
     
     override func viewDidLayoutSubviews() {
@@ -102,22 +101,6 @@ class TodayViewController: UIViewController {
         if (loadingIndicator.isAnimating()) {
             loadingIndicator.center = CGPointMake(CGRectGetMidX(self.view.bounds), CGRectGetMidY(self.view.bounds))
         }
-        
-        let maxHeight = Int(self.view.bounds.height) - 100
-        let maxWidth = Int(self.view.bounds.width) - 40
-        
-        if self.todayBeauty != nil {
-            var preferWidth = maxWidth
-            var preferHeight = Int(preferWidth * self.todayBeauty!.imageHeight! / self.todayBeauty!.imageWidth!)
-            
-            if preferHeight > maxHeight {
-                preferHeight = maxHeight
-                preferWidth = Int(preferHeight * self.todayBeauty!.imageWidth! / self.todayBeauty!.imageHeight!)
-            }
-            
-            self.beautyImageView.frame = CGRect(origin: CGPointZero, size: CGSize(width: preferWidth, height: preferHeight))
-        }
-        self.beautyImageView.center = CGPointMake(CGRectGetMidX(self.view.bounds), CGRectGetMidY(self.view.bounds) - 30)
     }
 
     func onSwipe(sender: UISwipeGestureRecognizer) {
