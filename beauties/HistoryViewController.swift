@@ -34,7 +34,7 @@ class HistoryViewController: UIViewController, CHTCollectionViewDelegateWaterfal
     override func awakeFromNib() {
         super.awakeFromNib()
         self.view.backgroundColor = ThemeColor
-        
+        self.edgesForExtendedLayout = .Bottom
         self.automaticallyAdjustsScrollViewInsets = true
         
         let statusBarHeight: CGFloat = 20
@@ -175,7 +175,6 @@ class HistoryViewController: UIViewController, CHTCollectionViewDelegateWaterfal
     
     func collectionView (collectionView: UICollectionView,layout collectionViewLayout: UICollectionViewLayout,
         sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
-        var entity = beauties[indexPath.row]
         return CGSize(width: CGFloat(100), height: CGFloat(100))
     }
 }
