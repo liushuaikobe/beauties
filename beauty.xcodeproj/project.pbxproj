@@ -245,7 +245,8 @@
 		4B1366341B3EF8A100986654 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0630;
+				LastSwiftUpdateCheck = 0700;
+				LastUpgradeCheck = 0700;
 				ORGANIZATIONNAME = "Shuai Liu";
 				TargetAttributes = {
 					4B13663B1B3EF8A100986654 = {
@@ -410,6 +411,7 @@
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -482,6 +484,7 @@
 				);
 				INFOPLIST_FILE = beauties/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "vars.me.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = beauty;
 				PROVISIONING_PROFILE = "1e021d34-b179-4904-94ce-d3c038ab20ef";
 			};
@@ -499,6 +502,7 @@
 				);
 				INFOPLIST_FILE = beauties/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "vars.me.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = beauty;
 				PROVISIONING_PROFILE = "1e021d34-b179-4904-94ce-d3c038ab20ef";
 			};
@@ -518,6 +522,7 @@
 				);
 				INFOPLIST_FILE = beautiesTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "vars.me.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = beautyTests;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/beauty.app/beauty";
 			};
@@ -533,6 +538,7 @@
 				);
 				INFOPLIST_FILE = beautiesTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "vars.me.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = beautyTests;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/beauty.app/beauty";
 			};
