@@ -21,7 +21,7 @@ class BeautyImageEntity: NSObject, NSCoding {
         
     }
     
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         imageUrl = aDecoder.decodeObjectForKey("imageUrl") as? String
         imageHeight = aDecoder.decodeObjectForKey("imageHeight") as? Int
         imageWidth = aDecoder.decodeObjectForKey("imageWidth") as? Int

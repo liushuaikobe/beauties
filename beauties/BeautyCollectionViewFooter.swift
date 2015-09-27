@@ -19,7 +19,7 @@ class BeautyCollectionViewFooter: UICollectionReusableView {
         self.commonInit()
     }
     
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         loadingIndicator = UIActivityIndicatorView(activityIndicatorStyle: .Gray)
         super.init(coder: aDecoder)
         self.commonInit()

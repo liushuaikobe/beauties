@@ -20,7 +20,7 @@ class BeautyCollectionViewCell: UICollectionViewCell {
         commonInit()
     }
 
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         imageView = UIImageView()
         super.init(coder: aDecoder)
         commonInit()
@@ -41,7 +41,7 @@ class BeautyCollectionViewCell: UICollectionViewCell {
         
         self.imageView.clipsToBounds = true
         self.imageView.frame = self.bounds
-        self.imageView.autoresizingMask = .FlexibleWidth | .FlexibleHeight
+        self.imageView.autoresizingMask = [.FlexibleWidth, .FlexibleHeight]
         self.imageView.contentMode = .ScaleAspectFill
         self.addSubview(self.imageView)
     }

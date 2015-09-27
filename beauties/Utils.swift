@@ -12,6 +12,8 @@ import Alamofire
 
 let ThemeColor = UIColor(red: 222.0 / 255.0, green: 110.0 / 255.0, blue: 75.0 / 255.0, alpha: 1)
 
+let DEBUG = true
+
 class BeautyDateUtil {
     
     static let PAGE_SIZE = 20
@@ -22,7 +24,7 @@ class BeautyDateUtil {
         return self.generateHistoryDateString(format: self.API_FORMAT, historyCount: self.PAGE_SIZE, page: page)
     }
     
-    class func generateHistoryDateString(#format: String, historyCount: Int, page: Int) -> [String] {
+    class func generateHistoryDateString(format format: String, historyCount: Int, page: Int) -> [String] {
         
         let today = NSDate()
         let calendar = NSCalendar.currentCalendar()
@@ -30,7 +32,7 @@ class BeautyDateUtil {
         formatter.dateFormat = format
         
         let unit = ((page - 1) * self.PAGE_SIZE)...(page * self.PAGE_SIZE - 1)
-        return unit.map({calendar.dateByAddingUnit(.CalendarUnitDay, value: -$0, toDate: today, options: nil)}).filter({$0 != nil}).map({formatter.stringFromDate($0!)})
+        return unit.map({calendar.dateByAddingUnit(.Day, value: -$0, toDate: today, options: [])}).filter({$0 != nil}).map({formatter.stringFromDate($0!)})
     }
     
     class func todayString() -> String {
@@ -48,79 +50,81 @@ class NetworkUtil {
     
     static let PAGE_SIZE = 20
     
-    class func getBeauties(page: Int, complete: ([String], NSError?) -> Void) {
+    class func getBeauties(page: Int, complete: ([String], ErrorType?) -> Void) {
 
         let url = "\(API_DATA_URL)\(PAGE_SIZE)/\(page)"
-#if DEBUG
-        println(url)
-#endif
+        
+        if (DEBUG) {
+            print(url)
+        }
+
         Alamofire.request(.GET, url).responseJSON {
-            _, _, json, error in
-            
-            if NetworkUtil.error(error) {
+            _, _, result in
+            switch result {
+            case let .Success(json):
+                complete(NetworkUtil.parseBeautyList(json), nil)
+            case let .Failure(_, error):
+                print(error)
                 complete([String](), error)
-                return
             }
-            
-            complete(NetworkUtil.parseBeautyList(json), nil)
         }
     }
     
     class func getTodayBeauty(complete: [String] -> Void) {
-#if DEBUG
-        println(API_DAY_URL + BeautyDateUtil.todayString())
-#endif
+
+        if (DEBUG) {
+            print(API_DAY_URL + BeautyDateUtil.todayString())
+        }
+        
         Alamofire.request(.GET, API_DAY_URL + BeautyDateUtil.todayString()).responseJSON {
-            _, _, json, error in
+            _, _, result in
             
-            if NetworkUtil.error(error) {
-                complete([String]())
-                return
-            }
-            
-            if let j = json as? Dictionary<String, AnyObject> {
-                
-                if let category = j["category"] as? [String] {
-                    
-                    if contains(category, "福利") {
-                        
-                        if let results = j["results"] as? Dictionary<String, AnyObject> {
-                            
-                            if let fulis = results["福利"] as? [Dictionary<String, AnyObject>] {
-                                
-                                var ret = [String]()
-                                
-                                for fuli in fulis {
-                                    ret.append(fuli["url"] as! String)
+            switch result {
+            case let .Success(json):
+                if let j = json as? Dictionary<String, AnyObject> {
+                    if let category = j["category"] as? [String] {
+                        if category.contains("福利") {
+                            if let results = j["results"] as? Dictionary<String, AnyObject> {
+                                if let fulis = results["福利"] as? [Dictionary<String, AnyObject>] {
+                                    var ret = [String]()
+                                    for fuli in fulis {
+                                        ret.append(fuli["url"] as! String)
+                                    }
+                                    complete(ret)
+                                    return
                                 }
-                                
-                                complete(ret)
-                                return
                             }
                         }
                     }
                 }
+                // No Beauty today, get a random beauty
+                NetworkUtil.getRandomBeauty(1, complete: complete)
+            case let .Failure(_, error):
+                print(error)
+                complete([String]())
             }
-            // No Beauty today, get a random beauty
-            NetworkUtil.getRandomBeauty(1, complete: complete)
+            
         }
     }
     
     class func getRandomBeauty(count: Int, complete: [String] -> Void) {
         
         let url = "\(API_RANDOM_URL)\(count)"
-#if DEBUG
-        println("Random URL --> \(url)")
-#endif
+        
+        if (DEBUG) {
+            print("Random URL --> \(url)")
+        }
+
         Alamofire.request(.GET, url).responseJSON {
-            _, _, json, error in
+            _, _, result in
             
-            if NetworkUtil.error(error) {
+            switch result {
+            case let .Success(json):
+                complete(NetworkUtil.parseBeautyList(json))
+            case let .Failure(_, error):
+                print(error)
                 complete([String]())
-                return
             }
-            
-            complete(NetworkUtil.parseBeautyList(json))
         }
     }
     
@@ -134,13 +138,5 @@ class NetworkUtil {
             }
         }
         return ret
-    }
-    
-    class func error(error: NSError?) -> Bool {
-        if error != nil {
-            println("ERROR: \(error?.localizedDescription)")
-            return true
-        }
-        return false
     }
 }

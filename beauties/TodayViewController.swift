@@ -23,7 +23,7 @@ class TodayViewController: UIViewController {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
     }
     
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         canBeClosed = false
         super.init(coder: aDecoder)
     }
@@ -39,39 +39,46 @@ class TodayViewController: UIViewController {
         loadingIndicator.startAnimating()
         
         beautyImageView = UIImageView(frame: self.view.bounds)
-        beautyImageView.autoresizingMask = .FlexibleWidth | .FlexibleHeight
+        beautyImageView.autoresizingMask = [.FlexibleWidth, .FlexibleHeight]
         beautyImageView.contentMode = .ScaleAspectFit
         beautyImageView.userInteractionEnabled = true
         beautyImageView.backgroundColor = UIColor.clearColor()
         self.view.addSubview(beautyImageView)
         
         if canBeClosed {
-            var swipeGesture = UISwipeGestureRecognizer(target: self, action: "onSwipe:")
+            let swipeGesture = UISwipeGestureRecognizer(target: self, action: "onSwipe:")
             swipeGesture.direction = UISwipeGestureRecognizerDirection.Down
             beautyImageView.addGestureRecognizer(swipeGesture)
             
-            var tapGesture = UITapGestureRecognizer(target: self, action: "onSwipe:")
+            let tapGesture = UITapGestureRecognizer(target: self, action: "onSwipe:")
             beautyImageView.addGestureRecognizer(tapGesture)
         }
         
-        var longPressGenture = UILongPressGestureRecognizer(target: self, action: "onLongPress:")
+        let longPressGenture = UILongPressGestureRecognizer(target: self, action: "onLongPress:")
         beautyImageView.addGestureRecognizer(longPressGenture)
         
-        var setImage: BeautyImageEntity -> Void = {
+        let setImage: BeautyImageEntity -> Void = {
+            
+            
+            
             if let imageURLString = $0.imageUrl {
                 if let imageURL = NSURL(string: imageURLString) {
                     self.beautyImageView.alpha = 0
                     KingfisherManager.sharedManager.retrieveImageWithURL(imageURL, optionsInfo: nil, progressBlock: nil, completionHandler: {
                         [weak self](image, error, cacheType, imageURL) -> () in
-                        self?.loadingIndicator.stopAnimating()
-                        if let beauty = image {
-                            self?.beautyImageView.image = beauty
-                            self?.setBackgroundImage(beauty)
-                            UIView.animateWithDuration(0.7, delay: 0, options: .CurveEaseIn, animations: {
-                                self?.beautyImageView.alpha = 1
-                            }, completion: nil)
-                        }
-                        self?.view.setNeedsLayout()
+                        
+                        dispatch_async(dispatch_get_main_queue(), {
+                            self?.loadingIndicator.stopAnimating()
+                            if let beauty = image {
+                                self?.beautyImageView.image = beauty
+                                self?.setBackgroundImage(beauty)
+                                UIView.animateWithDuration(0.7, delay: 0, options: .CurveEaseIn, animations: {
+                                    self?.beautyImageView.alpha = 1
+                                    }, completion: nil)
+                            }
+                            self?.view.setNeedsLayout()
+                        })
+                        
                     })
                 }
             }
@@ -86,7 +93,7 @@ class TodayViewController: UIViewController {
             [weak self] urls in
             
             if let sself = self {
-                if count(urls) > 0 {
+                if urls.count > 0 {
                     sself.todayBeauty = BeautyImageEntity()
                     sself.todayBeauty!.imageUrl = urls[0]
                     setImage(sself.todayBeauty!)
@@ -133,7 +140,7 @@ class TodayViewController: UIViewController {
     }
     
     func setBackgroundImage(image: UIImage) {
-        var bgi = UIImageView(image: image)
+        let bgi = UIImageView(image: image)
         bgi.contentMode = .ScaleToFill
         bgi.frame = self.view.bounds
         self.view.addSubview(bgi)
@@ -149,8 +156,8 @@ class TodayViewController: UIViewController {
     
     func shareImage() {
         if let image = self.beautyImageView.image {
-            var text = "分享漂亮妹纸一枚~"
-            var activityController = UIActivityViewController(activityItems: [text, image], applicationActivities: nil)
+            let text = "分享漂亮妹纸一枚~"
+            let activityController = UIActivityViewController(activityItems: [text, image], applicationActivities: nil)
             [self .presentViewController(activityController, animated: true, completion: nil)]
         }
     }
@@ -159,7 +166,7 @@ class TodayViewController: UIViewController {
         var message = "保存成功 (ฅ´ω`ฅ)"
         var OKTitle = "好的"
         if error != nil {
-            println(error.memory)
+            print(error.memory)
             message = "保存失败 (´◔ ‸◔')"
             OKTitle = "好吧"
         }

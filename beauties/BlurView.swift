@@ -11,8 +11,8 @@ import UIKit
 
 extension UIView {
     func applyBlurEffect() -> Void {
-        var blurEffect = UIBlurEffect(style: .Light)
-        var visualEffectView = UIVisualEffectView(effect: blurEffect)
+        let blurEffect = UIBlurEffect(style: .Light)
+        let visualEffectView = UIVisualEffectView(effect: blurEffect)
         visualEffectView.frame = self.bounds
         self.addSubview(visualEffectView)
     }
