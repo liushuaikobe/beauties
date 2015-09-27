@@ -30,8 +30,8 @@ class HistoryViewController: UIViewController, UICollectionViewDelegateFlowLayou
         super.init(coder: aDecoder)
     }
     
-    override func awakeFromNib() {
-        super.awakeFromNib()
+    override func viewDidLoad() {
+        super.viewDidLoad()
         self.view.backgroundColor = ThemeColor
         self.edgesForExtendedLayout = .Bottom
         self.automaticallyAdjustsScrollViewInsets = true
