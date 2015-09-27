@@ -33,7 +33,7 @@ class HistoryViewController: UIViewController, UICollectionViewDelegateFlowLayou
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = ThemeColor
-        self.edgesForExtendedLayout = .Bottom
+        self.edgesForExtendedLayout = .None
         self.automaticallyAdjustsScrollViewInsets = true
         
         let statusBarHeight: CGFloat = 20
@@ -42,7 +42,7 @@ class HistoryViewController: UIViewController, UICollectionViewDelegateFlowLayou
         collectionViewLayout.itemSize = CGSizeMake((CGRectGetWidth(self.view.bounds) - 10 * 3) / 2, 200)
         collectionViewLayout.minimumLineSpacing = 10
         collectionViewLayout.minimumInteritemSpacing = 10
-        collectionViewLayout.sectionInset = UIEdgeInsetsMake(0, 10, 0, 10)
+        collectionViewLayout.sectionInset = UIEdgeInsetsMake(0, 10, CGRectGetHeight(self.tabBarController!.tabBar.frame) + statusBarHeight + 10, 10)
         
         var frame = self.view.bounds
         frame.origin.y += statusBarHeight
