@@ -167,4 +167,14 @@ class HistoryViewController: UIViewController, UICollectionViewDelegateFlowLayou
             self.presentViewController(todayViewController, animated: true, completion: nil)
         }
     }
+    
+    // MARK: UICollectionViewDelegateFlowLayout
+    
+    func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
+        if page >= BeautyDateUtil.MAX_PAGE {
+            return CGSizeZero
+        } else {
+            return CGSizeMake(CGRectGetWidth(collectionView.bounds), 50)
+        }
+    }
 }
