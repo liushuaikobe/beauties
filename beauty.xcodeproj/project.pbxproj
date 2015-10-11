@@ -198,7 +198,7 @@
 				4B1366381B3EF8A100986654 /* Sources */,
 				4B1366391B3EF8A100986654 /* Frameworks */,
 				4B13663A1B3EF8A100986654 /* Resources */,
-				4BD0DD3C1B42C7FC00F08CF5 /* ShellScript */,
+				4BD0DD3C1B42C7FC00F08CF5 /* Run Script */,
 				4BE566CF1B74F1B10079197A /* ShellScript */,
 			);
 			buildRules = (
@@ -293,7 +293,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		4BD0DD3C1B42C7FC00F08CF5 /* ShellScript */ = {
+		4BD0DD3C1B42C7FC00F08CF5 /* Run Script */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -302,6 +302,7 @@
 				"$(SRCROOT)/Carthage/Build/iOS/Kingfisher.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/Alamofire.framework",
 			);
+			name = "Run Script";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -319,7 +320,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "./Fabric.framework/run 5b6d196a58f4acbc481f40758c365e9b14ae8732 3490fc62e207b8c7ec5ae2d4a8578db972041bdd761c9d59f51f7b5ca63b611f";
+			shellScript = "if [ \"${CONFIGURATION}\" = \"Release\" ]; then\n\n./Fabric.framework/run 5b6d196a58f4acbc481f40758c365e9b14ae8732 3490fc62e207b8c7ec5ae2d4a8578db972041bdd761c9d59f51f7b5ca63b611f\n\nfi\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
