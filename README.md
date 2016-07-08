@@ -23,4 +23,4 @@ API of gank.io: [http://gank.io/api](http://gank.io/api).
 
 The MIT (buy me coffee by alipay) License (MIT)
 
-![alipay](./demos/alipay.png)
+![donate](http://7xjdjy.com1.z0.glb.clouddn.com/donate.png)
